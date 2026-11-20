@@ -1,7 +1,9 @@
 """Generate a multi-voice Hindi voiceover (narrator + characters).
 
 Engines:
-  sarvam (default, realistic): Sarvam AI Bulbul v4-flash (cheaper). Needs an API key from dashboard.sarvam.ai.
+  sarvam (default, realistic): Sarvam AI Bulbul. New episodes use bulbul:v4-flash (cheaper);
+      an episode can pin a model with "tts": "bulbul:v3" in its script.json (Episode 1 does).
+      Needs an API key from dashboard.sarvam.ai.
       export SARVAM_API_KEY=...        (in Claude cloud sessions the proxy injects it; leave unset)
       python scripts/voiceover.py ep1 --dry-run   # show what would be billed, call nothing
       python scripts/voiceover.py ep1
@@ -19,15 +21,24 @@ Writes public/audio/<ep>/l-<scene>-<line>.mp3 and src/scam/<ep>/voice.json
 """
 import argparse, base64, hashlib, json, os, re, shutil, subprocess, sys, urllib.request
 
-SARVAM_MODEL = "bulbul:v4-flash"
+DEFAULT_MODEL = "bulbul:v4-flash"  # default for new episodes (cheaper)
 
-# Cast for Sarvam Bulbul v4-flash (style voices): speaker, pace, and a light ffmpeg filter
-SARVAM_SPEAKERS = {
-    "narrator": {"voice": "simran_hi_narration", "pace": 1.15, "fx": "highpass=f=70"},
-    "rahul":    {"voice": "rahul_hi_conversational", "pace": 1.1, "fx": "highpass=f=70"},
-    "scammer":  {"voice": "mukul_hi_suspense", "pace": 1.0, "fx": "highpass=f=140,lowpass=f=5500,aecho=0.8:0.5:35:0.1"},
-    "police":   {"voice": "anand_hi_news", "pace": 1.05, "fx": "highpass=f=60"},
-    "granny":   {"voice": "suman_hi_companion", "pace": 1.0, "fx": "highpass=f=80,vibrato=f=5:d=0.06"},
+# Cast per Sarvam model: speaker, pace, and a light ffmpeg filter
+SARVAM_CASTS = {
+    "bulbul:v4-flash": {
+        "narrator": {"voice": "simran_hi_narration", "pace": 1.15, "fx": "highpass=f=70"},
+        "rahul":    {"voice": "rahul_hi_conversational", "pace": 1.1, "fx": "highpass=f=70"},
+        "scammer":  {"voice": "mukul_hi_suspense", "pace": 1.0, "fx": "highpass=f=140,lowpass=f=5500,aecho=0.8:0.5:35:0.1"},
+        "police":   {"voice": "anand_hi_news", "pace": 1.05, "fx": "highpass=f=60"},
+        "granny":   {"voice": "suman_hi_companion", "pace": 1.0, "fx": "highpass=f=80,vibrato=f=5:d=0.06"},
+    },
+    "bulbul:v3": {  # Episode 1
+        "narrator": {"voice": "neha", "pace": 1.3, "fx": "highpass=f=70"},
+        "rahul":    {"voice": "rahul", "pace": 1.15, "fx": "highpass=f=70"},
+        "scammer":  {"voice": "varun", "pace": 1.08, "fx": "highpass=f=150,lowpass=f=5000,aecho=0.8:0.5:35:0.12"},
+        "police":   {"voice": "aditya", "pace": 1.12, "fx": "highpass=f=60"},
+        "granny":   {"voice": "kavitha", "pace": 1.15, "fx": "highpass=f=80,vibrato=f=5:d=0.08"},
+    },
 }
 
 # Cast for Kokoro (offline): base voice, speed, and an ffmpeg filter for character
@@ -75,7 +86,8 @@ def main():
         for f in os.listdir(out_dir):
             if f.endswith(".mp3") and (f.startswith("l-") or f.startswith("scene-")):
                 os.remove(os.path.join(out_dir, f))
-    speakers = SARVAM_SPEAKERS if a.engine == "sarvam" else KOKORO_SPEAKERS
+    sarvam_model = script.get("tts", DEFAULT_MODEL)
+    speakers = SARVAM_CASTS[sarvam_model] if a.engine == "sarvam" else KOKORO_SPEAKERS
     if a.engine == "kokoro":
         import soundfile as sf
         from kokoro_onnx import Kokoro
@@ -86,7 +98,7 @@ def main():
     stats = {"cached": 0, "new": 0, "chars": 0}
 
     def synth(sp, text, wav):
-        model = SARVAM_MODEL if a.engine == "sarvam" else "kokoro-v1.0"
+        model = sarvam_model if a.engine == "sarvam" else "kokoro-v1.0"
         key = hashlib.sha1(json.dumps([model, sp["voice"], sp.get("pace", sp.get("speed")), text], ensure_ascii=False).encode()).hexdigest()[:16]
         cached = os.path.join(cache_dir, key + ".wav")
         if os.path.exists(cached):
@@ -104,7 +116,7 @@ def main():
 
     def _synth(sp, text, wav):
         if a.engine == "sarvam":
-            body = {"text": text, "target_language_code": "hi-IN", "model": SARVAM_MODEL, "speaker": sp["voice"],
+            body = {"text": text, "target_language_code": "hi-IN", "model": sarvam_model, "speaker": sp["voice"],
                     "pace": sp["pace"], "speech_sample_rate": 44100, "enable_preprocessing": True}
             req = urllib.request.Request("https://api.sarvam.ai/text-to-speech", json.dumps(body).encode(),
                                          {"api-subscription-key": os.environ.get("SARVAM_API_KEY", "proxy-injected"), "Content-Type": "application/json"})
@@ -140,7 +152,7 @@ def main():
     print(f"TTS: {stats['new']} new line(s), {stats['chars']} chars billed; {stats['cached']} reused from cache")
     if a.dry_run:
         return
-    meta = {"engine": SARVAM_MODEL if a.engine == "sarvam" else "kokoro-v1.0", "speakers": speakers, "total": round(t, 3), "scenes": scenes}
+    meta = {"engine": sarvam_model if a.engine == "sarvam" else "kokoro-v1.0", "speakers": speakers, "total": round(t, 3), "scenes": scenes}
     json.dump(meta, open(os.path.join(root, "src/scam", a.episode, "voice.json"), "w"), ensure_ascii=False, indent=2)
     print("total:", round(t, 1), "s")
 
