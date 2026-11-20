@@ -1,286 +1,286 @@
 {
-  "engine": "kokoro-v1.0",
+  "engine": "sarvam-bulbul-v3",
   "speakers": {
     "narrator": {
-      "voice": "hf_alpha",
-      "speed": 1.2,
-      "fx": "highpass=f=70,acompressor=threshold=-18dB:ratio=3:attack=5:release=80"
+      "voice": "neha",
+      "pace": 1.3,
+      "fx": "highpass=f=70"
     },
     "rahul": {
-      "voice": "hm_omega",
-      "speed": 1.18,
-      "fx": "asetrate=24000*1.04,aresample=24000,atempo=1/1.04"
+      "voice": "rahul",
+      "pace": 1.15,
+      "fx": "highpass=f=70"
     },
     "scammer": {
-      "voice": "hm_psi",
-      "speed": 1.05,
-      "fx": "asetrate=24000*0.86,aresample=24000,atempo=1/0.86,highpass=f=180,lowpass=f=3600,aecho=0.8:0.6:40:0.15"
+      "voice": "varun",
+      "pace": 1.08,
+      "fx": "highpass=f=150,lowpass=f=5000,aecho=0.8:0.5:35:0.12"
     },
     "police": {
-      "voice": "hm_psi",
-      "speed": 1.12,
-      "fx": "asetrate=24000*0.93,aresample=24000,atempo=1/0.93,acompressor=threshold=-20dB:ratio=3"
+      "voice": "aditya",
+      "pace": 1.12,
+      "fx": "highpass=f=60"
     },
     "granny": {
-      "voice": "hf_beta",
-      "speed": 1.02,
-      "fx": "asetrate=24000*0.94,aresample=24000,atempo=1/0.94,vibrato=f=5.5:d=0.25"
+      "voice": "kavitha",
+      "pace": 1.15,
+      "fx": "highpass=f=80,vibrato=f=5:d=0.08"
     }
   },
-  "total": 83.306,
+  "total": 88.952,
   "scenes": [
     {
       "id": "hook",
       "mood": "sting",
       "start": 0.0,
-      "dur": 7.183,
+      "dur": 7.366,
       "lines": [
         {
           "who": "scammer",
           "text": "खाता रेंट पर दो... कमीशन आपका।",
           "file": "audio/ep1/l-01-1.mp3",
           "start": 0.12,
-          "dur": 2.299
+          "dur": 2.247
         },
         {
           "who": "narrator",
           "text": "अपने बैंक अकाउंट का कंट्रोल किसी और को दिया, तो जेल भी हो सकती है!",
           "file": "audio/ep1/l-01-2.mp3",
-          "start": 2.599,
-          "dur": 4.284
+          "start": 2.547,
+          "dur": 4.519
         }
       ]
     },
     {
       "id": "room",
       "mood": "tension",
-      "start": 7.183,
-      "dur": 5.955,
+      "start": 7.366,
+      "dur": 6.426,
       "lines": [
         {
           "who": "narrator",
           "text": "ये है राहुल, कॉलेज स्टूडेंट। एक रात, एक मैसेज आता है।",
           "file": "audio/ep1/l-02-1.mp3",
           "start": 0.12,
-          "dur": 3.5
+          "dur": 4.18
         },
         {
           "who": "rahul",
           "text": "इतनी रात को किसका मैसेज?",
           "file": "audio/ep1/l-02-2.mp3",
-          "start": 3.8,
-          "dur": 1.855
+          "start": 4.48,
+          "dur": 1.646
         }
       ]
     },
     {
       "id": "chat",
       "mood": "tension",
-      "start": 13.138,
-      "dur": 9.867,
+      "start": 13.792,
+      "dur": 8.927,
       "lines": [
         {
           "who": "scammer",
           "text": "हैलो राहुल! घर बैठे कमाई करोगे?",
           "file": "audio/ep1/l-03-1.mp3",
           "start": 0.12,
-          "dur": 2.534
+          "dur": 2.429
         },
         {
           "who": "scammer",
           "text": "तुम्हारे खाते में पैसा आएगा, बस आगे भेज देना।",
           "file": "audio/ep1/l-03-2.mp3",
-          "start": 2.834,
-          "dur": 3.474
+          "start": 2.729,
+          "dur": 2.847
         },
         {
           "who": "scammer",
           "text": "बदले में, कमीशन तुम्हारा।",
           "file": "audio/ep1/l-03-3.mp3",
-          "start": 6.488,
-          "dur": 1.802
+          "start": 5.756,
+          "dur": 2.09
         },
         {
           "who": "rahul",
           "text": "ठीक है, डील!",
           "file": "audio/ep1/l-03-4.mp3",
-          "start": 8.47,
-          "dur": 1.097
+          "start": 8.026,
+          "dur": 0.601
         }
       ]
     },
     {
       "id": "easyMoney",
       "mood": "light",
-      "start": 23.005,
-      "dur": 6.53,
+      "start": 22.719,
+      "dur": 7.366,
       "lines": [
         {
           "who": "narrator",
           "text": "राहुल को लगा, आसान कमाई है। पैसा आता गया, वो आगे भेजता गया।",
           "file": "audio/ep1/l-04-1.mp3",
           "start": 0.12,
-          "dur": 4.31
+          "dur": 5.277
         },
         {
           "who": "rahul",
           "text": "वाह! बैठे बैठे कमाई!",
           "file": "audio/ep1/l-04-2.mp3",
-          "start": 4.61,
-          "dur": 1.62
+          "start": 5.577,
+          "dur": 1.489
         }
       ]
     },
     {
       "id": "reveal",
       "mood": "dark",
-      "start": 29.535,
-      "dur": 7.966,
+      "start": 30.085,
+      "dur": 8.803,
       "lines": [
         {
           "who": "granny",
           "text": "हे भगवान! मेरे खाते से पैसे कैसे कट गए?",
           "file": "audio/ep1/l-05-1.mp3",
           "start": 0.12,
-          "dur": 2.873
+          "dur": 2.952
         },
         {
           "who": "narrator",
           "text": "असल में ये ठगी का पैसा था। राहुल का खाता बन चुका था, म्यूल अकाउंट।",
           "file": "audio/ep1/l-05-2.mp3",
-          "start": 3.173,
-          "dur": 4.493
+          "start": 3.252,
+          "dur": 5.251
         }
       ]
     },
     {
       "id": "frozen",
       "mood": "dark",
-      "start": 37.501,
-      "dur": 8.434,
+      "start": 38.888,
+      "dur": 9.766,
       "lines": [
         {
           "who": "rahul",
           "text": "ये क्या? मेरा खाता फ्रीज़?",
           "file": "audio/ep1/l-06-1.mp3",
           "start": 0.12,
-          "dur": 1.646
+          "dur": 2.011
         },
         {
           "who": "narrator",
           "text": "जाँच हुई, और पुलिस पहुँची राहुल के पास, ठग के पास नहीं।",
           "file": "audio/ep1/l-06-2.mp3",
-          "start": 1.946,
-          "dur": 3.631
+          "start": 2.311,
+          "dur": 4.885
         },
         {
           "who": "police",
           "text": "राहुल आप ही हैं? थाने चलना होगा।",
           "file": "audio/ep1/l-06-3.mp3",
-          "start": 5.757,
-          "dur": 2.377
+          "start": 7.376,
+          "dur": 2.09
         }
       ]
     },
     {
       "id": "station",
       "mood": "dark",
-      "start": 45.935,
-      "dur": 12.77,
+      "start": 48.654,
+      "dur": 13.528,
       "lines": [
         {
           "who": "police",
           "text": "तुम्हारे खाते से ठगी का पैसा आगे गया है।",
           "file": "audio/ep1/l-07-1.mp3",
           "start": 0.12,
-          "dur": 2.847
+          "dur": 2.664
         },
         {
           "who": "rahul",
           "text": "सर, मुझे सच में नहीं पता था!",
           "file": "audio/ep1/l-07-2.mp3",
-          "start": 3.147,
-          "dur": 1.881
+          "start": 2.964,
+          "dur": 1.646
         },
         {
           "who": "narrator",
           "text": "मुझे पता नहीं था, कहने से बचाव नहीं होता। RBI के मुताबिक, अनजाने में भी जाँच, और जेल तक हो सकती है।",
           "file": "audio/ep1/l-07-3.mp3",
-          "start": 5.208,
-          "dur": 7.262
+          "start": 4.79,
+          "dur": 8.438
         }
       ]
     },
     {
       "id": "rightWay",
       "mood": "hope",
-      "start": 58.705,
-      "dur": 8.538,
+      "start": 62.182,
+      "dur": 9.557,
       "lines": [
         {
           "who": "narrator",
           "text": "ऐसा मैसेज आए, तो ब्लॉक कीजिए।",
           "file": "audio/ep1/l-08-1.mp3",
           "start": 0.12,
-          "dur": 2.064
+          "dur": 2.403
         },
         {
           "who": "rahul",
           "text": "ना भाई, मेरा खाता किराए के लिए नहीं है!",
           "file": "audio/ep1/l-08-2.mp3",
-          "start": 2.364,
-          "dur": 2.612
+          "start": 2.703,
+          "dur": 2.351
         },
         {
           "who": "narrator",
           "text": "खाता, कार्ड, OTP और PIN, किसी को मत दीजिए।",
           "file": "audio/ep1/l-08-3.mp3",
-          "start": 5.156,
-          "dur": 3.082
+          "start": 5.234,
+          "dur": 4.023
         }
       ]
     },
     {
       "id": "steps",
       "mood": "hope",
-      "start": 67.243,
-      "dur": 7.862,
+      "start": 71.739,
+      "dur": 8.567,
       "lines": [
         {
           "who": "narrator",
           "text": "ऑफ़र ठुकराइए, और ठगी का शक हो, तो 1930 पर कॉल कीजिए।",
           "file": "audio/ep1/l-09-1.mp3",
           "start": 0.12,
-          "dur": 4.284
+          "dur": 4.545
         },
         {
           "who": "rahul",
           "text": "हैलो, 1930? ठगी की रिपोर्ट करनी है।",
           "file": "audio/ep1/l-09-2.mp3",
-          "start": 4.584,
-          "dur": 2.978
+          "start": 4.845,
+          "dur": 3.422
         }
       ]
     },
     {
       "id": "outro",
       "mood": "hope",
-      "start": 75.105,
-      "dur": 8.201,
+      "start": 80.306,
+      "dur": 8.646,
       "lines": [
         {
           "who": "rahul",
           "text": "दोस्तों, आसान कमाई के चक्कर में मत फँसना!",
           "file": "audio/ep1/l-10-1.mp3",
           "start": 0.12,
-          "dur": 3.082
+          "dur": 2.691
         },
         {
           "who": "narrator",
           "text": "दोस्तों और घरवालों को भेजिए, और ऐसे स्कैम से बचने के लिए, फॉलो कीजिए।",
           "file": "audio/ep1/l-10-2.mp3",
-          "start": 3.382,
-          "dur": 4.519
+          "start": 2.991,
+          "dur": 5.355
         }
       ]
     }

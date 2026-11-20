@@ -47,12 +47,12 @@ Scene durations and colours live in `src/theme.ts`.
 # Scam Alert Shorts (Hindi)
 
 A series of animated Hindi story shorts, about one minute each, on lesser-known frauds. Each one is 1080×1920 at 30 fps.
-Each episode follows a character, so it plays as a short story rather than an infographic, with a narrator and separate character voices (AI Hindi),
+Each episode follows a character, so it plays as a short story rather than an infographic, with a narrator and separate character voices (Sarvam Bulbul v3 Hindi TTS),
 suspense music that follows the story, quiet sound effects and burned-in captions with speaker tags.
 
 | Episode | Composition ID | Status |
 |---|---|---|
-| 1. Mule account trap: Rahul's story (~83s) | `ScamEp1-MuleAccount` | ✅ built |
+| 1. Mule account trap: Rahul's story (~89s) | `ScamEp1-MuleAccount` | ✅ built |
 | 2. Fingerprint (AePS) fraud | – | todo |
 | 3. Fake unclaimed money / insurance bonus | – | todo |
 | 4. Fake IPO / institutional account groups | – | todo |
@@ -72,20 +72,28 @@ Each episode is written as **lines spoken by a narrator and the characters** in 
   { "who": "rahul",    "text": "सर, मुझे सच में नहीं पता था!" },
   { "who": "narrator", "text": "..." } ] }
 ```
-| Speaker | Voice |
-|---|---|
-| narrator | female (`hf_alpha`), calm and clear |
-| rahul | young male (`hm_omega`), slightly brighter |
-| scammer | deep male (`hm_psi`), pitched down, phone-line filter |
-| police | firm male (`hm_psi`), slightly deeper |
-| granny | female (`hf_beta`), pitched down, slight tremble |
+Voices come from **[Sarvam AI Bulbul v3](https://www.sarvam.ai)**, a realistic Indian-language TTS, by default.
+Kokoro remains as an offline fallback (`--engine kokoro --models <dir>`).
+
+| Speaker | Bulbul v3 voice | Pace |
+|---|---|---|
+| narrator | `neha`: calm female | 1.3 |
+| rahul | `rahul`: young male | 1.15 |
+| scammer | `varun`: deepest male, with a light phone-line filter | 1.08 |
+| police | `aditya`: deep, slow male | 1.12 |
+| granny | `kavitha`: slow female, with a slight tremble | 1.15 |
+
+Change the cast in `SARVAM_SPEAKERS` in `scripts/voiceover.py`. Bulbul v3 voices: aditya, ritu, ashutosh, priya, neha, rahul, pooja,
+rohan, simran, kavya, amit, dev, ishita, shreya, ratan, varun, manan, sumit, roopa, kabir, aayan, shubh, advait, anand, tanya,
+tarun, sunny, mani, gokul, vijay, shruti, suhani, mohit, kavitha, rehan, soham, rupali.
 
 Generate the voices, then the score:
 ```bash
-pip install kokoro-onnx soundfile numpy scipy
-# download kokoro-v1.0.onnx + voices-v1.0.bin from the kokoro-onnx "model-files-v1.0" release
-npm run voice -- ep1 --models /path/to/models   # -> public/audio/ep1/l-*.mp3 + src/scam/ep1/voice.json
-npm run music -- ep1                            # -> public/audio/ep1/music.mp3
+# 1. Get an API key: sign up at https://dashboard.sarvam.ai, then API Keys -> create key
+export SARVAM_API_KEY=your_key          # (Claude cloud sessions inject it automatically)
+pip install numpy scipy soundfile
+npm run voice -- ep1                    # -> public/audio/ep1/l-*.mp3 + src/scam/ep1/voice.json
+npm run music -- ep1                    # -> public/audio/ep1/music.mp3
 npm run ep1 && npm run ep1:final
 ```
 - **Timing:** every scene lasts as long as its lines, and the animations (mouths, chat bubbles, knocks, bars) are cued to the lines.
