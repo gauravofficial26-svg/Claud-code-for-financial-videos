@@ -1,0 +1,138 @@
+{
+  "default_model": "bulbul:v4-flash",
+  "language": "hi-IN",
+  "sample_rate": 44100,
+  "timing": {
+    "lead": 0.12,
+    "gap": 0.18,
+    "tail": 0.3
+  },
+  "casts": {
+    "bulbul:v4-flash": {
+      "narrator": {
+        "voice": "simran_hi_narration",
+        "pace": 1.15,
+        "fx": "highpass=f=70"
+      },
+      "rahul": {
+        "voice": "rahul_hi_conversational",
+        "pace": 1.1,
+        "fx": "highpass=f=70"
+      },
+      "scammer": {
+        "voice": "mukul_hi_suspense",
+        "pace": 1.0,
+        "fx": "highpass=f=140,lowpass=f=5500,aecho=0.8:0.5:35:0.1"
+      },
+      "police": {
+        "voice": "anand_hi_news",
+        "pace": 1.05,
+        "fx": "highpass=f=60"
+      },
+      "granny": {
+        "voice": "suman_hi_companion",
+        "pace": 1.0,
+        "fx": "highpass=f=80,vibrato=f=5:d=0.06"
+      },
+      "ramesh": {
+        "voice": "mahesh_hi_documentary",
+        "pace": 1.12,
+        "fx": "highpass=f=60"
+      },
+      "neha": {
+        "voice": "shreya_hi_conversational",
+        "pace": 1.1,
+        "fx": "highpass=f=80"
+      },
+      "sharma": {
+        "voice": "ratan_hi_latenight_warm",
+        "pace": 1.0,
+        "fx": "highpass=f=60,vibrato=f=4.5:d=0.04"
+      },
+      "pinky": {
+        "voice": "ritu_hi_conversation",
+        "pace": 1.12,
+        "fx": "highpass=f=90"
+      },
+      "fakeofficer": {
+        "voice": "shubh_hi_customer",
+        "pace": 1.1,
+        "fx": "highpass=f=200,lowpass=f=3800"
+      },
+      "expert": {
+        "voice": "sunny_hi_ads",
+        "pace": 1.1,
+        "fx": "highpass=f=120"
+      },
+      "amit": {
+        "voice": "tarun_hi_conversational",
+        "pace": 1.1,
+        "fx": "highpass=f=70"
+      },
+      "priya": {
+        "voice": "sarika_hi_conversation",
+        "pace": 1.1,
+        "fx": "highpass=f=80"
+      },
+      "ivr": {
+        "voice": "ishita_hi_banking",
+        "pace": 1.0,
+        "fx": "highpass=f=300,lowpass=f=3400"
+      }
+    },
+    "bulbul:v3": {
+      "narrator": {
+        "voice": "neha",
+        "pace": 1.3,
+        "fx": "highpass=f=70"
+      },
+      "rahul": {
+        "voice": "rahul",
+        "pace": 1.15,
+        "fx": "highpass=f=70"
+      },
+      "scammer": {
+        "voice": "varun",
+        "pace": 1.08,
+        "fx": "highpass=f=150,lowpass=f=5000,aecho=0.8:0.5:35:0.12"
+      },
+      "police": {
+        "voice": "aditya",
+        "pace": 1.12,
+        "fx": "highpass=f=60"
+      },
+      "granny": {
+        "voice": "kavitha",
+        "pace": 1.15,
+        "fx": "highpass=f=80,vibrato=f=5:d=0.08"
+      }
+    },
+    "kokoro-v1.0": {
+      "narrator": {
+        "voice": "hf_alpha",
+        "speed": 1.2,
+        "fx": "highpass=f=70,acompressor=threshold=-18dB:ratio=3:attack=5:release=80"
+      },
+      "rahul": {
+        "voice": "hm_omega",
+        "speed": 1.18,
+        "fx": "asetrate=24000*1.04,aresample=24000,atempo=1/1.04"
+      },
+      "scammer": {
+        "voice": "hm_psi",
+        "speed": 1.05,
+        "fx": "asetrate=24000*0.86,aresample=24000,atempo=1/0.86,highpass=f=180,lowpass=f=3600,aecho=0.8:0.6:40:0.15"
+      },
+      "police": {
+        "voice": "hm_psi",
+        "speed": 1.12,
+        "fx": "asetrate=24000*0.93,aresample=24000,atempo=1/0.93,acompressor=threshold=-20dB:ratio=3"
+      },
+      "granny": {
+        "voice": "hf_beta",
+        "speed": 1.02,
+        "fx": "asetrate=24000*0.94,aresample=24000,atempo=1/0.94,vibrato=f=5.5:d=0.25"
+      }
+    }
+  }
+}

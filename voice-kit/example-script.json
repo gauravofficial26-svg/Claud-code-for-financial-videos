@@ -1,0 +1,12 @@
+{
+  "tts": "bulbul:v4-flash",
+  "scenes": [
+    { "id": "hook", "mood": "sting", "lines": [
+      { "who": "scammer", "text": "बस एक सेकंड, ये कॉल मर्ज कर दो ना..." },
+      { "who": "narrator", "text": "एक बटन दबाया, और OTP सीधा ठग के कान में!" }
+    ]},
+    { "id": "outro", "mood": "hope", "lines": [
+      { "who": "narrator", "text": "ऐसे स्कैम से बचने के लिए, हमें फॉलो कीजिए।" }
+    ]}
+  ]
+}

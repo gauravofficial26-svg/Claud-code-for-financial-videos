@@ -83,7 +83,7 @@ Kokoro remains as a free offline fallback (`--engine kokoro --models <dir>`).
 | police | `anand_hi_news` | 1.05 |
 | granny | `suman_hi_companion`, with a slight tremble | 1.0 |
 
-Change the cast in `SARVAM_SPEAKERS` in `scripts/voiceover.py`. Other useful v4-flash Hindi voices include
+Change the cast in `voice-kit/cast.json`. Other useful v4-flash Hindi voices include
 `tanya_hi_narration`, `shilpa_hi_narration`, `roopa_hi_narration`, `mahesh_hi_documentary`, `ratan_hi_latenight`,
 `shubh_hi_stories_dramatic`, `aditya_hi_conversational`, `ritu_hi_conversation` and `sarika_hi_conversation`.
 (v4-flash voices differ from v3 ones; an invalid name makes the API list them all.)
@@ -107,14 +107,15 @@ npm run ep1 && npm run ep1:final
 
 ### Making a new episode
 1. Write `src/scam/epN/script.json` with scenes, a `mood` per scene and lines per speaker. Open with a 2-line hook: a character's shock line, then the narrator's punch line.
-2. Add any new characters to `LOOKS` in `characters.tsx`, to `SARVAM_CASTS` in `scripts/voiceover.py` and to `SPEAKER_TAG` in `Subtitles.tsx`.
+2. Add any new characters to `LOOKS` in `characters.tsx`, to `voice-kit/cast.json` and to `SPEAKER_TAG` in `Subtitles.tsx`.
 3. Run `npm run voice -- epN --dry-run` to check the cost, then `npm run voice -- epN`, then `npm run music -- epN`.
 4. Write the scene visuals in `src/scam/epN/visuals.tsx`, reusing `kit.tsx` (StepsScene, OutroScene, Stamp, PopCard, ChipX) and `props.tsx`.
    Register the episode with `makeEpisode` in `epN/episode.ts`, add it to `Root.tsx`, and add the `epN` scripts to `package.json`.
 - **Timing:** every scene lasts as long as its lines, and the animations (mouths, chat bubbles, knocks, bars) are cued to the lines.
 - **Music** (`scripts/music.py`) is generated to the same timeline, with one mood per scene: `sting`, `tension` (ticking clock and drone), `light`, `dark` (heartbeat and clashing drone), `hope` (warm chords). It drops automatically whenever someone speaks.
 - **Sound effects** play at a low level (`sfxVolume` 0.3) so they never cover the voice.
-- `scripts/voiceover.py` rewrites 1930, OTP, PIN, RBI and website names into their spoken forms.
+- `voice-kit/spoken.json` rewrites 1930, OTP, PIN, RBI and website names into their spoken forms.
+- **Reusing in another repo:** copy the `voice-kit/` folder. See [voice-kit/README.md](voice-kit/README.md).
 - **Your own recordings:** replace the `l-XX-Y.mp3` files and update their `dur` in `voice.json`.
 
 Props (`--props='{...}'`): `useVoice`, `useMusic`, `musicVolume` (0.5), `sfxVolume` (0.3), `showSubtitles`.
