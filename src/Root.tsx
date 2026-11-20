@@ -5,11 +5,15 @@ import sample from "../data/sample.json";
 import type { VideoProps } from "./types";
 import { EpisodeVideo } from "./scam/EpisodeVideo";
 import { ep1 } from "./scam/ep1/episode";
+import { ep2 } from "./scam/ep2/episode";
+import { ep3 } from "./scam/ep3/episode";
+import { ep4 } from "./scam/ep4/episode";
+import { ep5 } from "./scam/ep5/episode";
 import type { Episode, EpisodeProps } from "./scam/types";
 import { CharSheet } from "./scam/CharSheet";
 import { episodeFrames } from "./scam/timeline";
 
-const episodes: Episode[] = [ep1];
+const episodes: Episode[] = [ep1, ep2, ep3, ep4, ep5];
 
 // one stable component per episode
 const components = Object.fromEntries(

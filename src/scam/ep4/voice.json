@@ -1,0 +1,241 @@
+{
+  "engine": "bulbul:v4-flash",
+  "speakers": {
+    "narrator": {
+      "voice": "simran_hi_narration",
+      "pace": 1.15,
+      "fx": "highpass=f=70"
+    },
+    "rahul": {
+      "voice": "rahul_hi_conversational",
+      "pace": 1.1,
+      "fx": "highpass=f=70"
+    },
+    "scammer": {
+      "voice": "mukul_hi_suspense",
+      "pace": 1.0,
+      "fx": "highpass=f=140,lowpass=f=5500,aecho=0.8:0.5:35:0.1"
+    },
+    "police": {
+      "voice": "anand_hi_news",
+      "pace": 1.05,
+      "fx": "highpass=f=60"
+    },
+    "granny": {
+      "voice": "suman_hi_companion",
+      "pace": 1.0,
+      "fx": "highpass=f=80,vibrato=f=5:d=0.06"
+    },
+    "ramesh": {
+      "voice": "mahesh_hi_documentary",
+      "pace": 1.12,
+      "fx": "highpass=f=60"
+    },
+    "neha": {
+      "voice": "shreya_hi_conversational",
+      "pace": 1.1,
+      "fx": "highpass=f=80"
+    },
+    "sharma": {
+      "voice": "ratan_hi_latenight_warm",
+      "pace": 1.0,
+      "fx": "highpass=f=60,vibrato=f=4.5:d=0.04"
+    },
+    "pinky": {
+      "voice": "ritu_hi_conversation",
+      "pace": 1.12,
+      "fx": "highpass=f=90"
+    },
+    "fakeofficer": {
+      "voice": "shubh_hi_customer",
+      "pace": 1.1,
+      "fx": "highpass=f=200,lowpass=f=3800"
+    },
+    "expert": {
+      "voice": "sunny_hi_ads",
+      "pace": 1.1,
+      "fx": "highpass=f=120"
+    },
+    "amit": {
+      "voice": "tarun_hi_conversational",
+      "pace": 1.1,
+      "fx": "highpass=f=70"
+    },
+    "priya": {
+      "voice": "sarika_hi_conversation",
+      "pace": 1.1,
+      "fx": "highpass=f=80"
+    },
+    "ivr": {
+      "voice": "ishita_hi_banking",
+      "pace": 1.0,
+      "fx": "highpass=f=300,lowpass=f=3400"
+    }
+  },
+  "total": 55.178,
+  "scenes": [
+    {
+      "id": "hook",
+      "mood": "sting",
+      "start": 0.0,
+      "dur": 7.993,
+      "lines": [
+        {
+          "who": "expert",
+          "text": "100% IPO अलॉटमेंट की गारंटी! जल्दी जुड़िए!",
+          "file": "audio/ep4/l-01-1.mp3",
+          "start": 0.12,
+          "dur": 3.527
+        },
+        {
+          "who": "narrator",
+          "text": "ये मैसेज दिखे, तो समझिए, लाखों लूटने का जाल बिछ चुका है।",
+          "file": "audio/ep4/l-01-2.mp3",
+          "start": 3.827,
+          "dur": 3.866
+        }
+      ]
+    },
+    {
+      "id": "intro",
+      "mood": "tension",
+      "start": 7.993,
+      "dur": 4.809,
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "अमित, शेयर मार्केट में नया है। एक दिन उसे, एक व्हाट्सऐप ग्रुप में जोड़ा जाता है।",
+          "file": "audio/ep4/l-02-1.mp3",
+          "start": 0.12,
+          "dur": 4.389
+        }
+      ]
+    },
+    {
+      "id": "group",
+      "mood": "light",
+      "start": 12.802,
+      "dur": 6.19,
+      "lines": [
+        {
+          "who": "expert",
+          "text": "हमारे साथ जुड़ो! सस्ते में IPO, और ब्लॉक डील दिलाएंगे!",
+          "file": "audio/ep4/l-03-1.mp3",
+          "start": 0.12,
+          "dur": 3.422
+        },
+        {
+          "who": "amit",
+          "text": "वाह, यहाँ तो सब कमा रहे हैं!",
+          "file": "audio/ep4/l-03-2.mp3",
+          "start": 3.722,
+          "dur": 2.168
+        }
+      ]
+    },
+    {
+      "id": "words",
+      "mood": "tension",
+      "start": 18.992,
+      "dur": 7.055,
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "सेबी ने ठीक इन्हीं शब्दों पर चेतावनी दी है। इंस्टीट्यूशनल अकाउंट, डिस्काउंट पर IPO, और सस्ते में ब्लॉक ट्रेड।",
+          "file": "audio/ep4/l-04-1.mp3",
+          "start": 0.12,
+          "dur": 6.635
+        }
+      ]
+    },
+    {
+      "id": "app",
+      "mood": "light",
+      "start": 26.047,
+      "dur": 5.044,
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "फिर एक ऐप डाउनलोड करवाया जाता है। उसमें मुनाफ़ा बढ़ता दिखता है, पर वो बस स्क्रीन का आँकड़ा है।",
+          "file": "audio/ep4/l-05-1.mp3",
+          "start": 0.12,
+          "dur": 4.624
+        }
+      ]
+    },
+    {
+      "id": "withdraw",
+      "mood": "dark",
+      "start": 31.091,
+      "dur": 5.302,
+      "lines": [
+        {
+          "who": "amit",
+          "text": "पैसे निकालने के लिए, नई फीस? ये क्या है?",
+          "file": "audio/ep4/l-06-1.mp3",
+          "start": 0.12,
+          "dur": 2.56
+        },
+        {
+          "who": "narrator",
+          "text": "पैसा अंदर तो जाता है, पर बाहर नहीं आता।",
+          "file": "audio/ep4/l-06-2.mp3",
+          "start": 2.86,
+          "dur": 2.142
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "mood": "hope",
+      "start": 36.393,
+      "dur": 6.742,
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "सेबी के मुताबिक, आम भारतीय निवासी FPI रूट से निवेश नहीं कर सकते। पैसे लगाने से पहले, SEBI रजिस्ट्रेशन जाँचिए।",
+          "file": "audio/ep4/l-07-1.mp3",
+          "start": 0.12,
+          "dur": 6.322
+        }
+      ]
+    },
+    {
+      "id": "steps",
+      "mood": "hope",
+      "start": 43.135,
+      "dur": 5.592,
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "सिर्फ़ SEBI रजिस्टर्ड ब्रोकर का ऐप, गारंटी वाले ऑफ़र से दूरी, और ठगी हो, तो 1930।",
+          "file": "audio/ep4/l-08-1.mp3",
+          "start": 0.12,
+          "dur": 5.172
+        }
+      ]
+    },
+    {
+      "id": "outro",
+      "mood": "hope",
+      "start": 48.727,
+      "dur": 6.451,
+      "lines": [
+        {
+          "who": "amit",
+          "text": "दोस्तों, गारंटी वाले ग्रुप से दूर रहना!",
+          "file": "audio/ep4/l-09-1.mp3",
+          "start": 0.12,
+          "dur": 2.429
+        },
+        {
+          "who": "narrator",
+          "text": "ये वीडियो, शेयर मार्केट में नए दोस्तों को भेजिए, और हमें फॉलो कीजिए।",
+          "file": "audio/ep4/l-09-2.mp3",
+          "start": 2.729,
+          "dur": 3.422
+        }
+      ]
+    }
+  ]
+}

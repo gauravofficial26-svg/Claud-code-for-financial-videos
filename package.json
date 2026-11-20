@@ -8,10 +8,18 @@
     "render": "remotion render FinancialShort out/short.mp4 --props=data/sample.json",
     "still": "remotion still FinancialShort out/thumbnail.png --props=data/sample.json --frame=60",
     "typecheck": "tsc --noEmit",
-    "ep1": "remotion render ScamEp1-MuleAccount out/ep1-mule-account.mp4",
-    "ep1:final": "ffmpeg -y -i out/ep1-mule-account.mp4 -c:v copy -af loudnorm=I=-14:TP=-1.5:LRA=7 -c:a aac -b:a 192k out/ep1-mule-account-final.mp4",
+    "ep1": "remotion render ScamEp1-MuleAccount out/ep1.mp4",
+    "ep1:final": "ffmpeg -y -i out/ep1.mp4 -c:v copy -af loudnorm=I=-14:TP=-1.5:LRA=7 -c:a aac -b:a 192k out/ep1-final.mp4",
     "voice": "python3 scripts/voiceover.py",
-    "music": "python3 scripts/music.py"
+    "music": "python3 scripts/music.py",
+    "ep2": "remotion render ScamEp2-AePS out/ep2.mp4",
+    "ep2:final": "ffmpeg -y -i out/ep2.mp4 -c:v copy -af loudnorm=I=-14:TP=-1.5:LRA=7 -c:a aac -b:a 192k out/ep2-final.mp4",
+    "ep3": "remotion render ScamEp3-UnclaimedMoney out/ep3.mp4",
+    "ep3:final": "ffmpeg -y -i out/ep3.mp4 -c:v copy -af loudnorm=I=-14:TP=-1.5:LRA=7 -c:a aac -b:a 192k out/ep3-final.mp4",
+    "ep4": "remotion render ScamEp4-FakeIPO out/ep4.mp4",
+    "ep4:final": "ffmpeg -y -i out/ep4.mp4 -c:v copy -af loudnorm=I=-14:TP=-1.5:LRA=7 -c:a aac -b:a 192k out/ep4-final.mp4",
+    "ep5": "remotion render ScamEp5-CallMerge out/ep5.mp4",
+    "ep5:final": "ffmpeg -y -i out/ep5.mp4 -c:v copy -af loudnorm=I=-14:TP=-1.5:LRA=7 -c:a aac -b:a 192k out/ep5-final.mp4"
   },
   "dependencies": {
     "@remotion/cli": "^4.0.545",

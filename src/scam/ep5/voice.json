@@ -1,0 +1,247 @@
+{
+  "engine": "bulbul:v4-flash",
+  "speakers": {
+    "narrator": {
+      "voice": "simran_hi_narration",
+      "pace": 1.15,
+      "fx": "highpass=f=70"
+    },
+    "rahul": {
+      "voice": "rahul_hi_conversational",
+      "pace": 1.1,
+      "fx": "highpass=f=70"
+    },
+    "scammer": {
+      "voice": "mukul_hi_suspense",
+      "pace": 1.0,
+      "fx": "highpass=f=140,lowpass=f=5500,aecho=0.8:0.5:35:0.1"
+    },
+    "police": {
+      "voice": "anand_hi_news",
+      "pace": 1.05,
+      "fx": "highpass=f=60"
+    },
+    "granny": {
+      "voice": "suman_hi_companion",
+      "pace": 1.0,
+      "fx": "highpass=f=80,vibrato=f=5:d=0.06"
+    },
+    "ramesh": {
+      "voice": "mahesh_hi_documentary",
+      "pace": 1.12,
+      "fx": "highpass=f=60"
+    },
+    "neha": {
+      "voice": "shreya_hi_conversational",
+      "pace": 1.1,
+      "fx": "highpass=f=80"
+    },
+    "sharma": {
+      "voice": "ratan_hi_latenight_warm",
+      "pace": 1.0,
+      "fx": "highpass=f=60,vibrato=f=4.5:d=0.04"
+    },
+    "pinky": {
+      "voice": "ritu_hi_conversation",
+      "pace": 1.12,
+      "fx": "highpass=f=90"
+    },
+    "fakeofficer": {
+      "voice": "shubh_hi_customer",
+      "pace": 1.1,
+      "fx": "highpass=f=200,lowpass=f=3800"
+    },
+    "expert": {
+      "voice": "sunny_hi_ads",
+      "pace": 1.1,
+      "fx": "highpass=f=120"
+    },
+    "amit": {
+      "voice": "tarun_hi_conversational",
+      "pace": 1.1,
+      "fx": "highpass=f=70"
+    },
+    "priya": {
+      "voice": "sarika_hi_conversation",
+      "pace": 1.1,
+      "fx": "highpass=f=80"
+    },
+    "ivr": {
+      "voice": "ishita_hi_banking",
+      "pace": 1.0,
+      "fx": "highpass=f=300,lowpass=f=3400"
+    }
+  },
+  "total": 53.651,
+  "scenes": [
+    {
+      "id": "hook",
+      "mood": "sting",
+      "start": 0.0,
+      "dur": 5.824,
+      "lines": [
+        {
+          "who": "scammer",
+          "text": "बस एक सेकंड, ये कॉल मर्ज कर दो ना...",
+          "file": "audio/ep5/l-01-1.mp3",
+          "start": 0.12,
+          "dur": 2.429
+        },
+        {
+          "who": "narrator",
+          "text": "एक बटन दबाया, और OTP सीधा ठग के कान में!",
+          "file": "audio/ep5/l-01-2.mp3",
+          "start": 2.729,
+          "dur": 2.795
+        }
+      ]
+    },
+    {
+      "id": "intro",
+      "mood": "tension",
+      "start": 5.824,
+      "dur": 7.65,
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "प्रिया को एक अनजान नंबर से कॉल आता है।",
+          "file": "audio/ep5/l-02-1.mp3",
+          "start": 0.12,
+          "dur": 1.75
+        },
+        {
+          "who": "scammer",
+          "text": "हाय प्रिया! तुम्हारे दोस्त ने, तुम्हारा नंबर दिया है।",
+          "file": "audio/ep5/l-02-2.mp3",
+          "start": 2.05,
+          "dur": 3.657
+        },
+        {
+          "who": "priya",
+          "text": "अच्छा? कौन से दोस्त ने?",
+          "file": "audio/ep5/l-02-3.mp3",
+          "start": 5.887,
+          "dur": 1.463
+        }
+      ]
+    },
+    {
+      "id": "merge",
+      "mood": "tension",
+      "start": 13.474,
+      "dur": 6.713,
+      "lines": [
+        {
+          "who": "scammer",
+          "text": "रुको, वो भी लाइन पर आ रहा है। कॉल मर्ज करो।",
+          "file": "audio/ep5/l-03-1.mp3",
+          "start": 0.12,
+          "dur": 2.795
+        },
+        {
+          "who": "narrator",
+          "text": "पर वो दूसरा कॉल, असल में बैंक का OTP वेरिफिकेशन कॉल था।",
+          "file": "audio/ep5/l-03-2.mp3",
+          "start": 3.095,
+          "dur": 3.318
+        }
+      ]
+    },
+    {
+      "id": "listen",
+      "mood": "dark",
+      "start": 20.187,
+      "dur": 7.914,
+      "lines": [
+        {
+          "who": "ivr",
+          "text": "आपका वन टाइम पासवर्ड है, चार, सात, एक, नौ।",
+          "file": "audio/ep5/l-04-1.mp3",
+          "start": 0.12,
+          "dur": 4.78
+        },
+        {
+          "who": "narrator",
+          "text": "कॉल मर्ज होते ही, ठग चुपचाप सब सुन लेता है।",
+          "file": "audio/ep5/l-04-2.mp3",
+          "start": 5.08,
+          "dur": 2.534
+        }
+      ]
+    },
+    {
+      "id": "loot",
+      "mood": "dark",
+      "start": 28.101,
+      "dur": 7.732,
+      "lines": [
+        {
+          "who": "priya",
+          "text": "ये क्या! मेरे खाते से पैसे कट गए!",
+          "file": "audio/ep5/l-05-1.mp3",
+          "start": 0.12,
+          "dur": 2.064
+        },
+        {
+          "who": "narrator",
+          "text": "उसी OTP से ठग लेनदेन कर लेता है। अक्सर उसके पास, पहले से लीक हुई बैंक जानकारी होती है।",
+          "file": "audio/ep5/l-05-2.mp3",
+          "start": 2.364,
+          "dur": 5.068
+        }
+      ]
+    },
+    {
+      "id": "rule",
+      "mood": "hope",
+      "start": 35.833,
+      "dur": 6.01,
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "याद रखिए, बैंक कभी फोन पर OTP या PIN नहीं माँगता। अनजान कॉल, कभी मर्ज मत कीजिए।",
+          "file": "audio/ep5/l-06-1.mp3",
+          "start": 0.12,
+          "dur": 5.59
+        }
+      ]
+    },
+    {
+      "id": "steps",
+      "mood": "hope",
+      "start": 41.843,
+      "dur": 6.977,
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "कॉल काटिए, नंबर ब्लॉक और रिपोर्ट कीजिए, और सवाल हो तो बैंक के असली कस्टमर केयर पर ही कॉल कीजिए। ठगी हो, तो 1930।",
+          "file": "audio/ep5/l-07-1.mp3",
+          "start": 0.12,
+          "dur": 6.557
+        }
+      ]
+    },
+    {
+      "id": "outro",
+      "mood": "hope",
+      "start": 48.82,
+      "dur": 4.831,
+      "lines": [
+        {
+          "who": "priya",
+          "text": "मैंने तो सीख लिया, अब आपकी बारी!",
+          "file": "audio/ep5/l-08-1.mp3",
+          "start": 0.12,
+          "dur": 1.593
+        },
+        {
+          "who": "narrator",
+          "text": "ये वीडियो पूरे परिवार को भेजिए, और हमें फॉलो कीजिए।",
+          "file": "audio/ep5/l-08-2.mp3",
+          "start": 1.893,
+          "dur": 2.638
+        }
+      ]
+    }
+  ]
+}

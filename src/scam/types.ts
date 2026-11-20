@@ -1,6 +1,8 @@
 import type React from "react";
 
-export type Speaker = "narrator" | "rahul" | "scammer" | "police" | "granny";
+export type Speaker =
+  | "narrator" | "rahul" | "scammer" | "police" | "granny"
+  | "ramesh" | "neha" | "sharma" | "pinky" | "fakeofficer" | "expert" | "amit" | "priya" | "ivr";
 export type Line = { who: Speaker; text: string };
 
 /** A spoken line placed on the scene's local timeline (frames) */

@@ -50,17 +50,17 @@ A series of animated Hindi story shorts, about one minute each, on lesser-known 
 Each episode follows a character, so it plays as a short story rather than an infographic, with a narrator and separate character voices (Sarvam Bulbul v4-flash Hindi TTS),
 suspense music that follows the story, quiet sound effects and burned-in captions with speaker tags.
 
-| Episode | Composition ID | Status |
-|---|---|---|
-| 1. Mule account trap: Rahul's story (~76s) | `ScamEp1-MuleAccount` | ✅ built |
-| 2. Fingerprint (AePS) fraud | – | todo |
-| 3. Fake unclaimed money / insurance bonus | – | todo |
-| 4. Fake IPO / institutional account groups | – | todo |
-| 5. Call-merging OTP trick | – | todo |
+| Episode | Composition ID | Story | Length | Voices |
+|---|---|---|---|---|
+| 1. Mule account trap | `ScamEp1-MuleAccount` | Rahul rents out his account | ~89s | Bulbul v3 |
+| 2. Fingerprint (AePS) fraud | `ScamEp2-AePS` | Ramesh ji's thumbprint is cloned from a registry | ~49s | v4-flash |
+| 3. Fake unclaimed money / insurance bonus | `ScamEp3-UnclaimedMoney` | Sharma ji gets a fake "RBI officer" call | ~54s | v4-flash |
+| 4. Fake IPO / institutional account groups | `ScamEp4-FakeIPO` | Amit joins a "guaranteed IPO" group | ~55s | v4-flash |
+| 5. Call-merging OTP trick | `ScamEp5-CallMerge` | Priya merges a call and loses her OTP | ~54s | v4-flash |
 
 ```bash
-npm run ep1          # render -> out/ep1-mule-account.mp4
-npm run ep1:final    # normalise loudness to -14 LUFS (YouTube) -> out/ep1-mule-account-final.mp4
+npm run ep2          # render -> out/ep2.mp4   (ep1 ... ep5)
+npm run ep2:final    # normalise loudness to -14 LUFS (YouTube) -> out/ep2-final.mp4
 npm run studio       # preview / tweak in the browser (ScamAlert folder; Dev/CharSheet shows all characters)
 ```
 
@@ -104,6 +104,13 @@ npm run voice -- ep1                    # -> public/audio/ep1/l-*.mp3 + src/scam
 npm run music -- ep1                    # -> public/audio/ep1/music.mp3
 npm run ep1 && npm run ep1:final
 ```
+
+### Making a new episode
+1. Write `src/scam/epN/script.json` with scenes, a `mood` per scene and lines per speaker. Open with a 2-line hook: a character's shock line, then the narrator's punch line.
+2. Add any new characters to `LOOKS` in `characters.tsx`, to `SARVAM_CASTS` in `scripts/voiceover.py` and to `SPEAKER_TAG` in `Subtitles.tsx`.
+3. Run `npm run voice -- epN --dry-run` to check the cost, then `npm run voice -- epN`, then `npm run music -- epN`.
+4. Write the scene visuals in `src/scam/epN/visuals.tsx`, reusing `kit.tsx` (StepsScene, OutroScene, Stamp, PopCard, ChipX) and `props.tsx`.
+   Register the episode with `makeEpisode` in `epN/episode.ts`, add it to `Root.tsx`, and add the `epN` scripts to `package.json`.
 - **Timing:** every scene lasts as long as its lines, and the animations (mouths, chat bubbles, knocks, bars) are cued to the lines.
 - **Music** (`scripts/music.py`) is generated to the same timeline, with one mood per scene: `sting`, `tension` (ticking clock and drone), `light`, `dark` (heartbeat and clashing drone), `hope` (warm chords). It drops automatically whenever someone speaks.
 - **Sound effects** play at a low level (`sfxVolume` 0.3) so they never cover the voice.
@@ -117,6 +124,7 @@ Props (`--props='{...}'`): `useVoice`, `useMusic`, `musicVolume` (0.5), `sfxVolu
 - `src/scam/sets.tsx`: room, phone close-up in a hand, chat bubbles, notifications, police station, lock-up bars, camera push-in
 - `src/scam/EpisodeVideo.tsx`: header, voice timeline, captions, music
 - `src/scam/Sfx.tsx` + `public/sfx/`: synthesised sound effects (ping, buzz, knock, slam, whoosh, pop)
+- `src/scam/kit.tsx`, `src/scam/props.tsx`: shared scene helpers and props (fingerprint, scanner, call screen, trading app, etc.)
 - `src/scam/epN/`: per-episode story scenes (`visuals.tsx`), lines (`script.json`) and voice timings
 - `captions/`: post captions with hashtags and source lines
 

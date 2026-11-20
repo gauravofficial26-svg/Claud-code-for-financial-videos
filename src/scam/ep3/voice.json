@@ -1,0 +1,248 @@
+{
+  "engine": "bulbul:v4-flash",
+  "speakers": {
+    "narrator": {
+      "voice": "simran_hi_narration",
+      "pace": 1.15,
+      "fx": "highpass=f=70"
+    },
+    "rahul": {
+      "voice": "rahul_hi_conversational",
+      "pace": 1.1,
+      "fx": "highpass=f=70"
+    },
+    "scammer": {
+      "voice": "mukul_hi_suspense",
+      "pace": 1.0,
+      "fx": "highpass=f=140,lowpass=f=5500,aecho=0.8:0.5:35:0.1"
+    },
+    "police": {
+      "voice": "anand_hi_news",
+      "pace": 1.05,
+      "fx": "highpass=f=60"
+    },
+    "granny": {
+      "voice": "suman_hi_companion",
+      "pace": 1.0,
+      "fx": "highpass=f=80,vibrato=f=5:d=0.06"
+    },
+    "ramesh": {
+      "voice": "mahesh_hi_documentary",
+      "pace": 1.12,
+      "fx": "highpass=f=60"
+    },
+    "neha": {
+      "voice": "shreya_hi_conversational",
+      "pace": 1.1,
+      "fx": "highpass=f=80"
+    },
+    "sharma": {
+      "voice": "ratan_hi_latenight_warm",
+      "pace": 1.0,
+      "fx": "highpass=f=60,vibrato=f=4.5:d=0.04"
+    },
+    "pinky": {
+      "voice": "ritu_hi_conversation",
+      "pace": 1.12,
+      "fx": "highpass=f=90"
+    },
+    "fakeofficer": {
+      "voice": "shubh_hi_customer",
+      "pace": 1.1,
+      "fx": "highpass=f=200,lowpass=f=3800"
+    },
+    "expert": {
+      "voice": "sunny_hi_ads",
+      "pace": 1.1,
+      "fx": "highpass=f=120"
+    },
+    "amit": {
+      "voice": "tarun_hi_conversational",
+      "pace": 1.1,
+      "fx": "highpass=f=70"
+    },
+    "priya": {
+      "voice": "sarika_hi_conversation",
+      "pace": 1.1,
+      "fx": "highpass=f=80"
+    },
+    "ivr": {
+      "voice": "ishita_hi_banking",
+      "pace": 1.0,
+      "fx": "highpass=f=300,lowpass=f=3400"
+    }
+  },
+  "total": 54.079,
+  "scenes": [
+    {
+      "id": "hook",
+      "mood": "sting",
+      "start": 0.0,
+      "dur": 7.104,
+      "lines": [
+        {
+          "who": "fakeofficer",
+          "text": "बधाई हो! आपके पुराने खाते में, लाखों रुपये पड़े हैं!",
+          "file": "audio/ep3/l-01-1.mp3",
+          "start": 0.12,
+          "dur": 3.291
+        },
+        {
+          "who": "narrator",
+          "text": "ऐसा कॉल आए, तो सावधान! ये तोहफ़ा नहीं, जाल है।",
+          "file": "audio/ep3/l-01-2.mp3",
+          "start": 3.591,
+          "dur": 3.213
+        }
+      ]
+    },
+    {
+      "id": "intro",
+      "mood": "tension",
+      "start": 7.104,
+      "dur": 6.608,
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "ये हैं शर्मा जी, रिटायर्ड टीचर। एक दोपहर, उनका फोन बजता है।",
+          "file": "audio/ep3/l-02-1.mp3",
+          "start": 0.12,
+          "dur": 4.362
+        },
+        {
+          "who": "sharma",
+          "text": "हाँ जी, कौन बोल रहे हैं?",
+          "file": "audio/ep3/l-02-2.mp3",
+          "start": 4.662,
+          "dur": 1.646
+        }
+      ]
+    },
+    {
+      "id": "call",
+      "mood": "tension",
+      "start": 13.712,
+      "dur": 3.999,
+      "lines": [
+        {
+          "who": "fakeofficer",
+          "text": "सर, मैं RBI से बोल रहा हूँ। आपका पुराना पैसा, बस इस लिंक से निकाल लीजिए।",
+          "file": "audio/ep3/l-03-1.mp3",
+          "start": 0.12,
+          "dur": 3.579
+        }
+      ]
+    },
+    {
+      "id": "bonus",
+      "mood": "tension",
+      "start": 17.711,
+      "dur": 3.973,
+      "lines": [
+        {
+          "who": "fakeofficer",
+          "text": "और आपकी बीमा पॉलिसी का बोनस भी बाकी है। बस थोड़ी सी फीस भरनी होगी।",
+          "file": "audio/ep3/l-04-1.mp3",
+          "start": 0.12,
+          "dur": 3.553
+        }
+      ]
+    },
+    {
+      "id": "pressure",
+      "mood": "dark",
+      "start": 21.684,
+      "dur": 4.205,
+      "lines": [
+        {
+          "who": "fakeofficer",
+          "text": "आज ही आख़िरी दिन है सर, वरना पॉलिसी रद्द!",
+          "file": "audio/ep3/l-05-1.mp3",
+          "start": 0.12,
+          "dur": 2.377
+        },
+        {
+          "who": "sharma",
+          "text": "अरे! अभी करता हूँ।",
+          "file": "audio/ep3/l-05-2.mp3",
+          "start": 2.677,
+          "dur": 1.228
+        }
+      ]
+    },
+    {
+      "id": "trap",
+      "mood": "dark",
+      "start": 25.889,
+      "dur": 5.671,
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "फिर आती है UPI लिंक, QR कोड, या एक ऐप, जिससे ठग आपका फोन ही कंट्रोल कर लेता है।",
+          "file": "audio/ep3/l-06-1.mp3",
+          "start": 0.12,
+          "dur": 5.251
+        }
+      ]
+    },
+    {
+      "id": "save",
+      "mood": "hope",
+      "start": 31.56,
+      "dur": 9.038,
+      "lines": [
+        {
+          "who": "pinky",
+          "text": "दादू रुकिए! ये फ्रॉड है।",
+          "file": "audio/ep3/l-07-1.mp3",
+          "start": 0.12,
+          "dur": 2.508
+        },
+        {
+          "who": "narrator",
+          "text": "अनक्लेम्ड पैसा, सिर्फ़ RBI के उद्गम पोर्टल पर दिखता है। RBI कभी फोन पर OTP या पासवर्ड नहीं माँगता।",
+          "file": "audio/ep3/l-07-2.mp3",
+          "start": 2.808,
+          "dur": 5.93
+        }
+      ]
+    },
+    {
+      "id": "steps",
+      "mood": "hope",
+      "start": 40.598,
+      "dur": 7.682,
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "लिंक मत खोलिए, पेमेंट मत कीजिए, और पॉलिसी सिर्फ़ बीमा कंपनी के आधिकारिक नंबर से जाँचिए। ठगी हो, तो 1930।",
+          "file": "audio/ep3/l-08-1.mp3",
+          "start": 0.12,
+          "dur": 7.262
+        }
+      ]
+    },
+    {
+      "id": "outro",
+      "mood": "hope",
+      "start": 48.28,
+      "dur": 5.799,
+      "lines": [
+        {
+          "who": "sharma",
+          "text": "बच्चों, घर के बुज़ुर्गों को ये ज़रूर दिखाना।",
+          "file": "audio/ep3/l-09-1.mp3",
+          "start": 0.12,
+          "dur": 2.743
+        },
+        {
+          "who": "narrator",
+          "text": "ऐसे स्कैम से बचने के लिए, हमें फॉलो कीजिए।",
+          "file": "audio/ep3/l-09-2.mp3",
+          "start": 3.043,
+          "dur": 2.456
+        }
+      ]
+    }
+  ]
+}

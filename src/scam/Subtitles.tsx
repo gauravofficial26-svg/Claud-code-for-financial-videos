@@ -28,6 +28,15 @@ export const SPEAKER_TAG: Record<Speaker, { name: string; color: string } | null
   scammer: { name: "ठग", color: "#F87171" },
   police: { name: "पुलिस", color: "#E5C068" },
   granny: { name: "दादी", color: "#F9A8D4" },
+  ramesh: { name: "रमेश जी", color: "#E7E5E4" },
+  neha: { name: "नेहा", color: "#38BDF8" },
+  sharma: { name: "शर्मा जी", color: "#FBBF24" },
+  pinky: { name: "पिंकी", color: "#F472B6" },
+  fakeofficer: { name: "फर्जी अधिकारी", color: "#F87171" },
+  expert: { name: "फर्जी एक्सपर्ट", color: "#F87171" },
+  amit: { name: "अमित", color: "#2DD4BF" },
+  priya: { name: "प्रिया", color: "#FB7185" },
+  ivr: { name: "बैंक OTP कॉल", color: "#A5B4FC" },
 };
 
 export const Subtitles: React.FC<{ cues: Cue[] }> = ({ cues }) => {

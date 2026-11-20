@@ -31,6 +31,16 @@ SARVAM_CASTS = {
         "scammer":  {"voice": "mukul_hi_suspense", "pace": 1.0, "fx": "highpass=f=140,lowpass=f=5500,aecho=0.8:0.5:35:0.1"},
         "police":   {"voice": "anand_hi_news", "pace": 1.05, "fx": "highpass=f=60"},
         "granny":   {"voice": "suman_hi_companion", "pace": 1.0, "fx": "highpass=f=80,vibrato=f=5:d=0.06"},
+        # Episode 2-5 characters
+        "ramesh":   {"voice": "mahesh_hi_documentary", "pace": 1.12, "fx": "highpass=f=60"},           # middle-aged father
+        "neha":     {"voice": "shreya_hi_conversational", "pace": 1.1, "fx": "highpass=f=80"},         # daughter
+        "sharma":   {"voice": "ratan_hi_latenight_warm", "pace": 1.0, "fx": "highpass=f=60,vibrato=f=4.5:d=0.04"},  # retired teacher
+        "pinky":    {"voice": "ritu_hi_conversation", "pace": 1.12, "fx": "highpass=f=90"},            # granddaughter
+        "fakeofficer": {"voice": "shubh_hi_customer", "pace": 1.1, "fx": "highpass=f=200,lowpass=f=3800"},  # polite fake 'officer' on a phone line
+        "expert":   {"voice": "sunny_hi_ads", "pace": 1.1, "fx": "highpass=f=120"},                    # hype 'expert' in the group
+        "amit":     {"voice": "tarun_hi_conversational", "pace": 1.1, "fx": "highpass=f=70"},
+        "priya":    {"voice": "sarika_hi_conversation", "pace": 1.1, "fx": "highpass=f=80"},
+        "ivr":      {"voice": "ishita_hi_banking", "pace": 1.0, "fx": "highpass=f=300,lowpass=f=3400"}, # bank OTP call heard through the merge
     },
     "bulbul:v3": {  # Episode 1
         "narrator": {"voice": "neha", "pace": 1.3, "fx": "highpass=f=70"},
@@ -58,7 +68,8 @@ SPOKEN = [
     (r"\bSEBI\b", "सेबी"), (r"\bIPO\b", "आई पी ओ"), (r"\bUPI\b", "यू पी आई"), (r"\bQR\b", "क्यू आर"),
     (r"\bCVV\b", "सी वी वी"), (r"\bSMS\b", "एस एम एस"), (r"\bAePS\b", "ए ई पी एस"),
     (r"cybercrime\.gov\.in", "साइबरक्राइम डॉट जीओवी डॉट इन"), (r"uidai\.gov\.in", "यू आई डी ए आई डॉट जीओवी डॉट इन"),
-    (r"udgam\.rbi\.org\.in", "उद्गम डॉट आर बी आई डॉट ओ आर जी डॉट इन"), (r'["“”]', ""), (r"\.\.\.", ","),
+    (r"udgam\.rbi\.org\.in", "उद्गम डॉट आर बी आई डॉट ओ आर जी डॉट इन"),
+    (r"mAadhaar", "एम-आधार"), (r"Lock Biometrics", "लॉक बायोमेट्रिक्स"), (r"\bFPI\b", "एफ पी आई"), (r"100%", "सौ प्रतिशत"), (r'["“”]', ""), (r"\.\.\.", ","),
 ]
 
 def spoken(text: str) -> str:

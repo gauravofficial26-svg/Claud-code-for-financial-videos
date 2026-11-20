@@ -10,6 +10,7 @@ export type Look = {
   shirt: string;
   shirt2?: string;
   glasses?: boolean;
+  shades?: boolean;
   mustache?: boolean;
   beard?: boolean;
 };
@@ -23,7 +24,17 @@ export const LOOKS: Record<string, Look> = {
   friend2: { skin: "#A9714A", hair: "#111", hairStyle: "short", shirt: "#F59E0B", shirt2: "#D97706" },
   dad: { skin: "#C08457", hair: "#55555F", hairStyle: "short", shirt: "#64748B", shirt2: "#475569", glasses: true, mustache: true },
   mom: { skin: "#D69A6C", hair: "#2A1A12", hairStyle: "bun", shirt: "#7C3AED", shirt2: "#5B21B6" },
+  // Episodes 2-5
+  ramesh: { skin: "#B9794C", hair: "#2B2B30", hairStyle: "short", shirt: "#F5F5F4", shirt2: "#D6D3D1", mustache: true },
+  neha: { skin: "#D8A07A", hair: "#1F140E", hairStyle: "long", shirt: "#0EA5E9", shirt2: "#0284C7" },
+  sharma: { skin: "#C8936A", hair: "#E5E7EB", hairStyle: "bald", shirt: "#A16207", shirt2: "#854D0E", glasses: true, mustache: true },
+  pinky: { skin: "#E0A878", hair: "#2A1A12", hairStyle: "long", shirt: "#F472B6", shirt2: "#DB2777" },
+  amit: { skin: "#B57A50", hair: "#1B1B22", hairStyle: "short", shirt: "#0F766E", shirt2: "#115E59" },
+  priya: { skin: "#C98B5E", hair: "#0F0F14", hairStyle: "long", shirt: "#E11D48", shirt2: "#BE123C" },
+  expert: { skin: "#A8714B", hair: "#111", hairStyle: "short", shirt: "#7C3AED", shirt2: "#6D28D9", shades: true, mustache: true },
 };
+
+const isLight = (hex: string) => parseInt(hex.slice(1, 3), 16) > 0xa0;
 
 const darken = (hex: string, amt = 0.18) => {
   const n = parseInt(hex.slice(1), 16);
@@ -90,11 +101,11 @@ const Face: React.FC<{ look: Look; expr: Expr; talking: boolean; seed: number }>
       {/* tears */}
       {expr === "sad" && <path d={`M150 242 q-6 ${14 + (frame % 30) / 2} 0 ${22 + (frame % 30) / 2} q6 -6 0 -${22 + (frame % 30) / 2}`} fill="#7DD3FC" />}
       {/* brows */}
-      <line x1="146" y1={brow[0]} x2="182" y2={brow[1]} stroke={look.hairStyle === "bun" && look.hair === "#D7D7DF" ? "#9CA3AF" : dark} strokeWidth="8" strokeLinecap="round" />
-      <line x1="254" y1={brow[0]} x2="218" y2={brow[1]} stroke={look.hairStyle === "bun" && look.hair === "#D7D7DF" ? "#9CA3AF" : dark} strokeWidth="8" strokeLinecap="round" />
+      <line x1="146" y1={brow[0]} x2="182" y2={brow[1]} stroke={isLight(look.hair) ? "#9CA3AF" : dark} strokeWidth="8" strokeLinecap="round" />
+      <line x1="254" y1={brow[0]} x2="218" y2={brow[1]} stroke={isLight(look.hair) ? "#9CA3AF" : dark} strokeWidth="8" strokeLinecap="round" />
       {/* nose */}
       <path d="M200 236 Q192 258 204 260" fill="none" stroke={darken(look.skin, 0.3)} strokeWidth="5" strokeLinecap="round" />
-      {look.mustache && <path d="M168 266 Q184 254 200 262 Q216 254 232 266 Q216 274 200 268 Q184 274 168 266 Z" fill={look.hair === "#55555F" ? "#4B4B55" : dark} />}
+      {look.mustache && <path d="M168 266 Q184 254 200 262 Q216 254 232 266 Q216 274 200 268 Q184 274 168 266 Z" fill={look.hair === "#55555F" ? "#4B4B55" : isLight(look.hair) ? "#D1D5DB" : dark} />}
       {mouth}
       {/* cheeks */}
       {(expr === "happy" || expr === "grin") && (
@@ -108,6 +119,14 @@ const Face: React.FC<{ look: Look; expr: Expr; talking: boolean; seed: number }>
           <circle cx="165" cy="226" r="26" />
           <circle cx="235" cy="226" r="26" />
           <line x1="191" y1="224" x2="209" y2="224" />
+        </g>
+      )}
+      {look.shades && (
+        <g>
+          <rect x="136" y="206" width="58" height="38" rx="12" fill="#0B0B10" />
+          <rect x="206" y="206" width="58" height="38" rx="12" fill="#0B0B10" />
+          <line x1="194" y1="220" x2="206" y2="220" stroke="#0B0B10" strokeWidth="6" />
+          <line x1="146" y1="214" x2="160" y2="214" stroke="#fff" strokeWidth="4" opacity="0.5" />
         </g>
       )}
       {expr === "shock" && (
@@ -137,6 +156,13 @@ const Hair: React.FC<{ look: Look; back?: boolean }> = ({ look, back }) => {
         <circle cx="200" cy="110" r="44" fill={h} />
       ) : (
         <path d="M104 210 C100 128 156 104 200 104 C246 104 300 128 296 210 C284 162 250 146 200 146 C150 146 116 162 104 210 Z" fill={h} />
+      );
+    case "bald":
+      return back ? null : (
+        <g fill={h}>
+          <ellipse cx="108" cy="200" rx="16" ry="34" />
+          <ellipse cx="292" cy="200" rx="16" ry="34" />
+        </g>
       );
     case "police":
       return back ? null : (

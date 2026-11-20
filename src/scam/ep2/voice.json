@@ -1,0 +1,234 @@
+{
+  "engine": "bulbul:v4-flash",
+  "speakers": {
+    "narrator": {
+      "voice": "simran_hi_narration",
+      "pace": 1.15,
+      "fx": "highpass=f=70"
+    },
+    "rahul": {
+      "voice": "rahul_hi_conversational",
+      "pace": 1.1,
+      "fx": "highpass=f=70"
+    },
+    "scammer": {
+      "voice": "mukul_hi_suspense",
+      "pace": 1.0,
+      "fx": "highpass=f=140,lowpass=f=5500,aecho=0.8:0.5:35:0.1"
+    },
+    "police": {
+      "voice": "anand_hi_news",
+      "pace": 1.05,
+      "fx": "highpass=f=60"
+    },
+    "granny": {
+      "voice": "suman_hi_companion",
+      "pace": 1.0,
+      "fx": "highpass=f=80,vibrato=f=5:d=0.06"
+    },
+    "ramesh": {
+      "voice": "mahesh_hi_documentary",
+      "pace": 1.12,
+      "fx": "highpass=f=60"
+    },
+    "neha": {
+      "voice": "shreya_hi_conversational",
+      "pace": 1.1,
+      "fx": "highpass=f=80"
+    },
+    "sharma": {
+      "voice": "ratan_hi_latenight_warm",
+      "pace": 1.0,
+      "fx": "highpass=f=60,vibrato=f=4.5:d=0.04"
+    },
+    "pinky": {
+      "voice": "ritu_hi_conversation",
+      "pace": 1.12,
+      "fx": "highpass=f=90"
+    },
+    "fakeofficer": {
+      "voice": "shubh_hi_customer",
+      "pace": 1.1,
+      "fx": "highpass=f=200,lowpass=f=3800"
+    },
+    "expert": {
+      "voice": "sunny_hi_ads",
+      "pace": 1.1,
+      "fx": "highpass=f=120"
+    },
+    "amit": {
+      "voice": "tarun_hi_conversational",
+      "pace": 1.1,
+      "fx": "highpass=f=70"
+    },
+    "priya": {
+      "voice": "sarika_hi_conversation",
+      "pace": 1.1,
+      "fx": "highpass=f=80"
+    },
+    "ivr": {
+      "voice": "ishita_hi_banking",
+      "pace": 1.0,
+      "fx": "highpass=f=300,lowpass=f=3400"
+    }
+  },
+  "total": 48.858,
+  "scenes": [
+    {
+      "id": "hook",
+      "mood": "sting",
+      "start": 0.0,
+      "dur": 5.511,
+      "lines": [
+        {
+          "who": "ramesh",
+          "text": "ना OTP दिया, ना कार्ड... फिर पैसे कैसे कटे?",
+          "file": "audio/ep2/l-01-1.mp3",
+          "start": 0.12,
+          "dur": 2.926
+        },
+        {
+          "who": "narrator",
+          "text": "आपकी उँगली का निशान ही, चोरी हो सकता है!",
+          "file": "audio/ep2/l-01-2.mp3",
+          "start": 3.226,
+          "dur": 1.985
+        }
+      ]
+    },
+    {
+      "id": "intro",
+      "mood": "tension",
+      "start": 5.511,
+      "dur": 4.103,
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "ये हैं रमेश जी। कुछ महीने पहले, उन्होंने अपनी प्रॉपर्टी की रजिस्ट्री कराई थी।",
+          "file": "audio/ep2/l-02-1.mp3",
+          "start": 0.12,
+          "dur": 3.683
+        }
+      ]
+    },
+    {
+      "id": "leak",
+      "mood": "dark",
+      "start": 9.614,
+      "dur": 4.286,
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "ठगों ने ऐसे ही दस्तावेज़ों से, उनका आधार नंबर और अँगूठे का निशान निकाल लिया।",
+          "file": "audio/ep2/l-03-1.mp3",
+          "start": 0.12,
+          "dur": 3.866
+        }
+      ]
+    },
+    {
+      "id": "clone",
+      "mood": "dark",
+      "start": 13.9,
+      "dur": 5.122,
+      "lines": [
+        {
+          "who": "scammer",
+          "text": "बस एक नकली सिलिकॉन निशान, और ये छोटी मशीन... काम हो गया।",
+          "file": "audio/ep2/l-04-1.mp3",
+          "start": 0.12,
+          "dur": 4.702
+        }
+      ]
+    },
+    {
+      "id": "match",
+      "mood": "dark",
+      "start": 19.022,
+      "dur": 5.2,
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "बैंक के सिस्टम को लगा, ये असली रमेश जी हैं। पैसे निकले, और आया सिर्फ़ डेबिट का SMS।",
+          "file": "audio/ep2/l-05-1.mp3",
+          "start": 0.12,
+          "dur": 4.78
+        }
+      ]
+    },
+    {
+      "id": "lock",
+      "mood": "hope",
+      "start": 24.222,
+      "dur": 9.638,
+      "lines": [
+        {
+          "who": "neha",
+          "text": "पापा, घबराइए मत। चलिए, आधार बायोमेट्रिक लॉक करते हैं।",
+          "file": "audio/ep2/l-06-1.mp3",
+          "start": 0.12,
+          "dur": 3.631
+        },
+        {
+          "who": "narrator",
+          "text": "uidai.gov.in या mAadhaar ऐप पर, Lock Biometrics चुनिए।",
+          "file": "audio/ep2/l-06-2.mp3",
+          "start": 3.931,
+          "dur": 5.407
+        }
+      ]
+    },
+    {
+      "id": "unlock",
+      "mood": "hope",
+      "start": 33.86,
+      "dur": 3.659,
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "ज़रूरत हो, तभी अनलॉक कीजिए, और काम होते ही दोबारा लॉक।",
+          "file": "audio/ep2/l-07-1.mp3",
+          "start": 0.12,
+          "dur": 3.239
+        }
+      ]
+    },
+    {
+      "id": "steps",
+      "mood": "hope",
+      "start": 37.519,
+      "dur": 5.984,
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "पैसे कटें, तो तुरंत 1930 पर कॉल कीजिए। पहला घंटा सबसे अहम है। फिर बैंक को लिखित में बताइए।",
+          "file": "audio/ep2/l-08-1.mp3",
+          "start": 0.12,
+          "dur": 5.564
+        }
+      ]
+    },
+    {
+      "id": "outro",
+      "mood": "hope",
+      "start": 43.503,
+      "dur": 5.355,
+      "lines": [
+        {
+          "who": "neha",
+          "text": "ये वीडियो अपने मम्मी-पापा को ज़रूर भेजिए!",
+          "file": "audio/ep2/l-09-1.mp3",
+          "start": 0.12,
+          "dur": 2.299
+        },
+        {
+          "who": "narrator",
+          "text": "ऐसे स्कैम से बचने के लिए, हमें फॉलो कीजिए।",
+          "file": "audio/ep2/l-09-2.mp3",
+          "start": 2.599,
+          "dur": 2.456
+        }
+      ]
+    }
+  ]
+}
