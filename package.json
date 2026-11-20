@@ -1,0 +1,22 @@
+{
+  "name": "financial-videos",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Data-driven vertical finance videos (Shorts/Reels) built with Remotion",
+  "scripts": {
+    "studio": "remotion studio",
+    "render": "remotion render FinancialShort out/short.mp4 --props=data/sample.json",
+    "still": "remotion still FinancialShort out/thumbnail.png --props=data/sample.json --frame=60",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.545",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.545"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "typescript": "^5.6.3"
+  }
+}
