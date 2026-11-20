@@ -1,9 +1,13 @@
 """Generate a multi-voice Hindi voiceover (narrator + characters).
 
 Engines:
-  sarvam (default, realistic): Sarvam AI Bulbul v3. Needs an API key from dashboard.sarvam.ai.
+  sarvam (default, realistic): Sarvam AI Bulbul v4-flash (cheaper). Needs an API key from dashboard.sarvam.ai.
       export SARVAM_API_KEY=...        (in Claude cloud sessions the proxy injects it; leave unset)
+      python scripts/voiceover.py ep1 --dry-run   # show what would be billed, call nothing
       python scripts/voiceover.py ep1
+
+Cost saving: raw TTS clips are cached in .tts-cache/ by (model, voice, pace, text).
+Re-running only pays for lines that are new or edited; changing effects/timing is free.
   kokoro (offline fallback):
       pip install kokoro-onnx soundfile
       # model files: https://github.com/thewh1teagle/kokoro-onnx/releases/tag/model-files-v1.0
@@ -13,15 +17,17 @@ Reads  src/scam/<ep>/script.json   (scenes -> lines -> {who, text})
 Writes public/audio/<ep>/l-<scene>-<line>.mp3 and src/scam/<ep>/voice.json
        (scene + line start/duration in seconds; the video and music follow this timeline)
 """
-import argparse, base64, json, os, re, subprocess, sys, urllib.request
+import argparse, base64, hashlib, json, os, re, shutil, subprocess, sys, urllib.request
 
-# Cast for Sarvam Bulbul v3: speaker, pace, and a light ffmpeg filter
+SARVAM_MODEL = "bulbul:v4-flash"
+
+# Cast for Sarvam Bulbul v4-flash (style voices): speaker, pace, and a light ffmpeg filter
 SARVAM_SPEAKERS = {
-    "narrator": {"voice": "neha", "pace": 1.3, "fx": "highpass=f=70"},
-    "rahul":    {"voice": "rahul", "pace": 1.15, "fx": "highpass=f=70"},
-    "scammer":  {"voice": "varun", "pace": 1.08, "fx": "highpass=f=150,lowpass=f=5000,aecho=0.8:0.5:35:0.12"},
-    "police":   {"voice": "aditya", "pace": 1.12, "fx": "highpass=f=60"},
-    "granny":   {"voice": "kavitha", "pace": 1.15, "fx": "highpass=f=80,vibrato=f=5:d=0.08"},
+    "narrator": {"voice": "simran_hi_narration", "pace": 1.15, "fx": "highpass=f=70"},
+    "rahul":    {"voice": "rahul_hi_conversational", "pace": 1.1, "fx": "highpass=f=70"},
+    "scammer":  {"voice": "mukul_hi_suspense", "pace": 1.0, "fx": "highpass=f=140,lowpass=f=5500,aecho=0.8:0.5:35:0.1"},
+    "police":   {"voice": "anand_hi_news", "pace": 1.05, "fx": "highpass=f=60"},
+    "granny":   {"voice": "suman_hi_companion", "pace": 1.0, "fx": "highpass=f=80,vibrato=f=5:d=0.06"},
 }
 
 # Cast for Kokoro (offline): base voice, speed, and an ffmpeg filter for character
@@ -58,24 +64,47 @@ def main():
     ap.add_argument("episode")
     ap.add_argument("--engine", choices=["sarvam", "kokoro"], default="sarvam")
     ap.add_argument("--models", help="kokoro model dir")
+    ap.add_argument("--dry-run", action="store_true", help="list lines that need synthesis and the characters billed; call nothing")
     a = ap.parse_args()
 
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     script = json.load(open(os.path.join(root, "src/scam", a.episode, "script.json"), encoding="utf-8"))
     out_dir = os.path.join(root, "public/audio", a.episode)
     os.makedirs(out_dir, exist_ok=True)
-    for f in os.listdir(out_dir):
-        if f.endswith(".mp3") and (f.startswith("l-") or f.startswith("scene-")):
-            os.remove(os.path.join(out_dir, f))
+    if not a.dry_run:
+        for f in os.listdir(out_dir):
+            if f.endswith(".mp3") and (f.startswith("l-") or f.startswith("scene-")):
+                os.remove(os.path.join(out_dir, f))
     speakers = SARVAM_SPEAKERS if a.engine == "sarvam" else KOKORO_SPEAKERS
     if a.engine == "kokoro":
         import soundfile as sf
         from kokoro_onnx import Kokoro
         k = Kokoro(os.path.join(a.models, "kokoro-v1.0.onnx"), os.path.join(a.models, "voices-v1.0.bin"))
 
+    cache_dir = os.path.join(root, ".tts-cache")
+    os.makedirs(cache_dir, exist_ok=True)
+    stats = {"cached": 0, "new": 0, "chars": 0}
+
     def synth(sp, text, wav):
+        model = SARVAM_MODEL if a.engine == "sarvam" else "kokoro-v1.0"
+        key = hashlib.sha1(json.dumps([model, sp["voice"], sp.get("pace", sp.get("speed")), text], ensure_ascii=False).encode()).hexdigest()[:16]
+        cached = os.path.join(cache_dir, key + ".wav")
+        if os.path.exists(cached):
+            stats["cached"] += 1
+            shutil.copy(cached, wav)
+            return True
+        stats["new"] += 1
+        stats["chars"] += len(text)
+        if a.dry_run:
+            print(f"   would synthesize ({len(text)} chars): {text}")
+            return False
+        _synth(sp, text, cached)
+        shutil.copy(cached, wav)
+        return True
+
+    def _synth(sp, text, wav):
         if a.engine == "sarvam":
-            body = {"text": text, "target_language_code": "hi-IN", "model": "bulbul:v3", "speaker": sp["voice"],
+            body = {"text": text, "target_language_code": "hi-IN", "model": SARVAM_MODEL, "speaker": sp["voice"],
                     "pace": sp["pace"], "speech_sample_rate": 44100, "enable_preprocessing": True}
             req = urllib.request.Request("https://api.sarvam.ai/text-to-speech", json.dumps(body).encode(),
                                          {"api-subscription-key": os.environ.get("SARVAM_API_KEY", "proxy-injected"), "Content-Type": "application/json"})
@@ -93,7 +122,8 @@ def main():
         for li, ln in enumerate(sc["lines"], 1):
             sp = speakers[ln["who"]]
             wav = os.path.join(out_dir, "tmp.wav")
-            synth(sp, spoken(ln["text"]), wav)
+            if not synth(sp, spoken(ln["text"]), wav):
+                continue
             name = f"l-{si:02d}-{li}.mp3"
             mp3 = os.path.join(out_dir, name)
             fx = sp["fx"] + ",silenceremove=start_periods=1:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse,loudnorm=I=-16:TP=-2"
@@ -107,7 +137,10 @@ def main():
         print(f"scene {si:2d} {sc['id']:<10} {dur:5.2f}s  " + " | ".join(f"{l['who']} {l['dur']:.1f}" for l in lines))
         t += dur
 
-    meta = {"engine": "sarvam-bulbul-v3" if a.engine == "sarvam" else "kokoro-v1.0", "speakers": speakers, "total": round(t, 3), "scenes": scenes}
+    print(f"TTS: {stats['new']} new line(s), {stats['chars']} chars billed; {stats['cached']} reused from cache")
+    if a.dry_run:
+        return
+    meta = {"engine": SARVAM_MODEL if a.engine == "sarvam" else "kokoro-v1.0", "speakers": speakers, "total": round(t, 3), "scenes": scenes}
     json.dump(meta, open(os.path.join(root, "src/scam", a.episode, "voice.json"), "w"), ensure_ascii=False, indent=2)
     print("total:", round(t, 1), "s")
 

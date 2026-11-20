@@ -47,12 +47,12 @@ Scene durations and colours live in `src/theme.ts`.
 # Scam Alert Shorts (Hindi)
 
 A series of animated Hindi story shorts, about one minute each, on lesser-known frauds. Each one is 1080×1920 at 30 fps.
-Each episode follows a character, so it plays as a short story rather than an infographic, with a narrator and separate character voices (Sarvam Bulbul v3 Hindi TTS),
+Each episode follows a character, so it plays as a short story rather than an infographic, with a narrator and separate character voices (Sarvam Bulbul v4-flash Hindi TTS),
 suspense music that follows the story, quiet sound effects and burned-in captions with speaker tags.
 
 | Episode | Composition ID | Status |
 |---|---|---|
-| 1. Mule account trap: Rahul's story (~89s) | `ScamEp1-MuleAccount` | ✅ built |
+| 1. Mule account trap: Rahul's story (~76s) | `ScamEp1-MuleAccount` | ✅ built |
 | 2. Fingerprint (AePS) fraud | – | todo |
 | 3. Fake unclaimed money / insurance bonus | – | todo |
 | 4. Fake IPO / institutional account groups | – | todo |
@@ -72,20 +72,28 @@ Each episode is written as **lines spoken by a narrator and the characters** in 
   { "who": "rahul",    "text": "सर, मुझे सच में नहीं पता था!" },
   { "who": "narrator", "text": "..." } ] }
 ```
-Voices come from **[Sarvam AI Bulbul v3](https://www.sarvam.ai)**, a realistic Indian-language TTS, by default.
-Kokoro remains as an offline fallback (`--engine kokoro --models <dir>`).
+Voices come from **[Sarvam AI](https://www.sarvam.ai) `bulbul:v4-flash`** (cheaper than v3, with style-specific voices) by default.
+Kokoro remains as a free offline fallback (`--engine kokoro --models <dir>`).
 
-| Speaker | Bulbul v3 voice | Pace |
+| Speaker | v4-flash voice | Pace |
 |---|---|---|
-| narrator | `neha`: calm female | 1.3 |
-| rahul | `rahul`: young male | 1.15 |
-| scammer | `varun`: deepest male, with a light phone-line filter | 1.08 |
-| police | `aditya`: deep, slow male | 1.12 |
-| granny | `kavitha`: slow female, with a slight tremble | 1.15 |
+| narrator | `simran_hi_narration` | 1.15 |
+| rahul | `rahul_hi_conversational` | 1.1 |
+| scammer | `mukul_hi_suspense`, with a light phone-line filter | 1.0 |
+| police | `anand_hi_news` | 1.05 |
+| granny | `suman_hi_companion`, with a slight tremble | 1.0 |
 
-Change the cast in `SARVAM_SPEAKERS` in `scripts/voiceover.py`. Bulbul v3 voices: aditya, ritu, ashutosh, priya, neha, rahul, pooja,
-rohan, simran, kavya, amit, dev, ishita, shreya, ratan, varun, manan, sumit, roopa, kabir, aayan, shubh, advait, anand, tanya,
-tarun, sunny, mani, gokul, vijay, shruti, suhani, mohit, kavitha, rehan, soham, rupali.
+Change the cast in `SARVAM_SPEAKERS` in `scripts/voiceover.py`. Other useful v4-flash Hindi voices include
+`tanya_hi_narration`, `shilpa_hi_narration`, `roopa_hi_narration`, `mahesh_hi_documentary`, `ratan_hi_latenight`,
+`shubh_hi_stories_dramatic`, `aditya_hi_conversational`, `ritu_hi_conversation` and `sarika_hi_conversation`.
+(v4-flash voices differ from v3 ones; an invalid name makes the API list them all.)
+
+**Keeping costs low**
+- Run `npm run voice -- ep1 --dry-run` first. It lists the lines that need new audio and the characters that would be billed, and calls nothing.
+- Raw clips are cached in `.tts-cache/` by (model, voice, pace, text), so re-runs **only pay for new or edited lines**.
+  Changing effects, music or visuals and re-rendering costs nothing.
+- Episode 1 is about 1,100 characters in total.
+- Rendering (Remotion), music (`scripts/music.py`) and sound effects are all local and free.
 
 Generate the voices, then the score:
 ```bash
