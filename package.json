@@ -9,7 +9,8 @@
     "still": "remotion still FinancialShort out/thumbnail.png --props=data/sample.json --frame=60",
     "typecheck": "tsc --noEmit",
     "ep1": "remotion render ScamEp1-MuleAccount out/ep1-mule-account.mp4",
-    "ep1:voice": "remotion render ScamEp1-MuleAccount out/ep1-mule-account.mp4 --props={\"voiceover\":\"audio/ep1.mp3\"}"
+    "ep1:final": "ffmpeg -y -i out/ep1-mule-account.mp4 -c:v copy -af loudnorm=I=-14:TP=-1.5:LRA=7 -c:a aac -b:a 192k out/ep1-mule-account-final.mp4",
+    "voice": "python3 scripts/voiceover.py"
   },
   "dependencies": {
     "@remotion/cli": "^4.0.545",

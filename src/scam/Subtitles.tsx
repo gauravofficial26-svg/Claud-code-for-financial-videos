@@ -29,7 +29,7 @@ export const Subtitles: React.FC<{ text: string; durationInFrames: number }> = (
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const chunks = chunk(text);
-  const usable = durationInFrames - Math.round(fps * 0.3);
+  const usable = durationInFrames - Math.round(fps * 0.45);
   const total = chunks.reduce((a, c) => a + c.length, 0);
   let acc = 0;
   let current = chunks[chunks.length - 1];
@@ -47,7 +47,7 @@ export const Subtitles: React.FC<{ text: string; durationInFrames: number }> = (
         position: "absolute",
         left: 90,
         right: 150,
-        top: 1390,
+        top: 1470,
         display: "flex",
         justifyContent: "center",
       }}

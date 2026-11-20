@@ -46,38 +46,51 @@ Scene durations and colours live in `src/theme.ts`.
 
 # Scam Alert Shorts (Hindi)
 
-A series of 45–50 second Hindi shorts on lesser-known frauds. Each one is 1080×1920 at 30 fps, with
-a 2-second hook, scene visuals, on-screen headline text, burned-in voiceover captions and a share/follow outro.
+A series of animated Hindi story shorts, about one minute each, on lesser-known frauds. Each one is 1080×1920 at 30 fps.
+Each episode follows a character, so it plays as a short story rather than an infographic, with an AI Hindi voiceover,
+sound effects, a quiet music bed and burned-in captions.
 
 | Episode | Composition ID | Status |
 |---|---|---|
-| 1. Mule account trap (48s) | `ScamEp1-MuleAccount` | ✅ built |
+| 1. Mule account trap: Rahul's story (~67s) | `ScamEp1-MuleAccount` | ✅ built |
 | 2. Fingerprint (AePS) fraud | – | todo |
 | 3. Fake unclaimed money / insurance bonus | – | todo |
 | 4. Fake IPO / institutional account groups | – | todo |
 | 5. Call-merging OTP trick | – | todo |
 
 ```bash
-npm run ep1          # silent version with captions -> out/ep1-mule-account.mp4
-npm run studio       # preview / tweak in the browser (ScamAlert folder)
+npm run ep1          # render -> out/ep1-mule-account.mp4
+npm run ep1:final    # normalise loudness to -14 LUFS (YouTube) -> out/ep1-mule-account-final.mp4
+npm run studio       # preview / tweak in the browser (ScamAlert folder; Dev/CharSheet shows all characters)
 ```
 
-### Adding your voiceover
-1. Record the Hindi voiceover following the scene timings in `src/scam/ep1/episode.tsx`
-   (`from`/`to` seconds per scene). Total 48 s.
-2. Save it as `public/audio/ep1.mp3`.
-3. Run `npm run ep1:voice`.
+### Voiceover
+The voiceover lines live in `src/scam/ep1/script.json`. Each scene runs as long as its spoken line
+(`src/scam/timeline.ts`), so you can edit the lines freely.
 
-Optional props (pass with `--props='{...}'`): `music` (file in `public/`), `musicVolume` (default 0.12),
-`showSubtitles` (default true).
+Regenerate the AI voice ([Kokoro](https://github.com/thewh1teagle/kokoro-onnx), runs offline):
+```bash
+pip install kokoro-onnx soundfile
+# download kokoro-v1.0.onnx + voices-v1.0.bin from the kokoro-onnx "model-files-v1.0" release
+npm run voice -- ep1 --models /path/to/models --voice hm_omega --speed 1.2
+#   voices: hm_omega, hm_psi (male) · hf_alpha, hf_beta (female)
+```
+This writes `public/audio/ep1/scene-XX.mp3` and `src/scam/ep1/voice.json` (clip lengths).
+`scripts/voiceover.py` rewrites 1930, OTP, PIN, RBI and website names into their spoken forms before speaking them.
+
+To use **your own recorded voice**, replace the `scene-XX.mp3` files and update the durations in `voice.json`.
+
+Props (`--props='{...}'`): `useVoice` (default true), `music` (default `audio/bed.mp3`), `musicVolume` (0.08), `showSubtitles` (true).
 
 ### Structure
-- `src/scam/EpisodeVideo.tsx`: shared layout (header, scene timing, headline, captions, audio)
-- `src/scam/StepCards.tsx`, `src/scam/Outro.tsx`: "3 steps" and "share and follow" scenes reused by every episode
-- `src/scam/icons.tsx`: generic SVG icons only, with no real bank, police, RBI, SEBI or insurer logos
-- `src/scam/epN/`: per-episode visuals and script data (`episode.tsx`)
+- `src/scam/characters.tsx`: flat animated people (Rahul, granny, scammer, police, friends, parents) with blinking, expressions, talking mouths and arm poses
+- `src/scam/sets.tsx`: room, phone close-up in a hand, chat bubbles, notifications, police station, lock-up bars, camera push-in
+- `src/scam/EpisodeVideo.tsx`: header, voice timeline, captions, music
+- `src/scam/Sfx.tsx` + `public/sfx/`: synthesised sound effects (ping, buzz, knock, slam, whoosh, pop)
+- `src/scam/epN/`: per-episode story scenes (`visuals.tsx`), lines (`script.json`) and voice timings
 - `captions/`: post captions with hashtags and source lines
 
+All people and places are generic, with no real bank, police, RBI, SEBI or insurer logos. The source line notes that the story is fictional.
 Font: [Mukta](https://fonts.google.com/specimen/Mukta) (SIL OFL), bundled in `public/fonts`.
 
 **Before posting:** confirm 1930 and cybercrime.gov.in again, and keep captions as awareness content, never investment advice.

@@ -1,0 +1,29 @@
+{
+  "engine": "kokoro-v1.0",
+  "voice": "hm_omega",
+  "speed": 1.2,
+  "files": [
+    "audio/ep1/scene-01.mp3",
+    "audio/ep1/scene-02.mp3",
+    "audio/ep1/scene-03.mp3",
+    "audio/ep1/scene-04.mp3",
+    "audio/ep1/scene-05.mp3",
+    "audio/ep1/scene-06.mp3",
+    "audio/ep1/scene-07.mp3",
+    "audio/ep1/scene-08.mp3",
+    "audio/ep1/scene-09.mp3",
+    "audio/ep1/scene-10.mp3"
+  ],
+  "durations": [
+    4.523,
+    4.736,
+    7.403,
+    3.136,
+    6.379,
+    6.763,
+    8.427,
+    6.955,
+    7.616,
+    6.293
+  ]
+}

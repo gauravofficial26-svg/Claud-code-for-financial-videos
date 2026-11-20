@@ -6,6 +6,8 @@ import type { VideoProps } from "./types";
 import { EpisodeVideo } from "./scam/EpisodeVideo";
 import { ep1 } from "./scam/ep1/episode";
 import type { Episode, EpisodeProps } from "./scam/types";
+import { CharSheet } from "./scam/CharSheet";
+import { episodeFrames } from "./scam/timeline";
 
 const episodes: Episode[] = [ep1];
 
@@ -15,9 +17,9 @@ const components = Object.fromEntries(
 );
 
 const defaultEpisodeProps: EpisodeProps = {
-  voiceover: null,
-  music: null,
-  musicVolume: 0.12,
+  useVoice: true,
+  music: "audio/bed.mp3",
+  musicVolume: 0.08,
   showSubtitles: true,
 };
 
@@ -29,13 +31,16 @@ export const RemotionRoot: React.FC = () => (
           key={ep.id}
           id={ep.id}
           component={components[ep.id]}
-          durationInFrames={Math.round(ep.scenes[ep.scenes.length - 1].to * FPS)}
+          durationInFrames={episodeFrames(ep, FPS)}
           fps={FPS}
           width={WIDTH}
           height={HEIGHT}
           defaultProps={defaultEpisodeProps}
         />
       ))}
+    </Folder>
+    <Folder name="Dev">
+      <Composition id="CharSheet" component={CharSheet} durationInFrames={30} fps={FPS} width={WIDTH} height={HEIGHT} />
     </Folder>
     <Composition
       id="FinancialShort"
