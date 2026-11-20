@@ -1,4 +1,4 @@
-import type { Episode, VoiceMeta } from "../types";
+import type { Episode, Line, SceneProps, VoiceMeta } from "../types";
 import script from "./script.json";
 import voice from "./voice.json";
 import {
@@ -7,7 +7,7 @@ import {
 
 const SOURCE = "स्रोत: RBI जागरूकता चेतावनी, मनी म्यूल (RBI कहता है) · शिकायत: 1930 या cybercrime.gov.in · कहानी काल्पनिक है";
 
-const visuals: Record<string, React.FC<{ dur: number }>> = {
+const visuals: Record<string, React.FC<SceneProps>> = {
   hook: HookScene,
   room: RoomScene,
   chat: ChatScene,
@@ -17,7 +17,7 @@ const visuals: Record<string, React.FC<{ dur: number }>> = {
   station: StationScene,
   rightWay: RightWayScene,
   steps: StepsScene,
-  outro: ({ dur }) => <OutroScene dur={dur} source={SOURCE} />,
+  outro: (p) => <OutroScene {...p} source={SOURCE} />,
 };
 
 const onScreen: Record<string, string> = {
@@ -32,5 +32,6 @@ export const ep1: Episode = {
   caption:
     "खाता किराए पर देना यानी खुद को ठगी में फँसाना। आसान कमाई के ऑफ़र से बचें, और अनजान लोगों के पैसे अपने खाते से आगे न भेजें। #MuleAccount #ScamAlert #CyberFraud #1930 #पैसेकीसुरक्षा",
   voice: voice as VoiceMeta,
-  scenes: script.scenes.map((s) => ({ ...s, onScreen: onScreen[s.id], Visual: visuals[s.id] })),
+  music: "audio/ep1/music.mp3",
+  scenes: script.scenes.map((s) => ({ id: s.id, lines: s.lines as Line[], onScreen: onScreen[s.id], Visual: visuals[s.id] })),
 };

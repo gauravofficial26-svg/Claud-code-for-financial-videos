@@ -47,12 +47,12 @@ Scene durations and colours live in `src/theme.ts`.
 # Scam Alert Shorts (Hindi)
 
 A series of animated Hindi story shorts, about one minute each, on lesser-known frauds. Each one is 1080×1920 at 30 fps.
-Each episode follows a character, so it plays as a short story rather than an infographic, with an AI Hindi voiceover,
-sound effects, a quiet music bed and burned-in captions.
+Each episode follows a character, so it plays as a short story rather than an infographic, with a narrator and separate character voices (AI Hindi),
+suspense music that follows the story, quiet sound effects and burned-in captions with speaker tags.
 
 | Episode | Composition ID | Status |
 |---|---|---|
-| 1. Mule account trap: Rahul's story (~67s) | `ScamEp1-MuleAccount` | ✅ built |
+| 1. Mule account trap: Rahul's story (~83s) | `ScamEp1-MuleAccount` | ✅ built |
 | 2. Fingerprint (AePS) fraud | – | todo |
 | 3. Fake unclaimed money / insurance bonus | – | todo |
 | 4. Fake IPO / institutional account groups | – | todo |
@@ -64,23 +64,37 @@ npm run ep1:final    # normalise loudness to -14 LUFS (YouTube) -> out/ep1-mule-
 npm run studio       # preview / tweak in the browser (ScamAlert folder; Dev/CharSheet shows all characters)
 ```
 
-### Voiceover
-The voiceover lines live in `src/scam/ep1/script.json`. Each scene runs as long as its spoken line
-(`src/scam/timeline.ts`), so you can edit the lines freely.
-
-Regenerate the AI voice ([Kokoro](https://github.com/thewh1teagle/kokoro-onnx), runs offline):
-```bash
-pip install kokoro-onnx soundfile
-# download kokoro-v1.0.onnx + voices-v1.0.bin from the kokoro-onnx "model-files-v1.0" release
-npm run voice -- ep1 --models /path/to/models --voice hm_omega --speed 1.2
-#   voices: hm_omega, hm_psi (male) · hf_alpha, hf_beta (female)
+### Voices, music and sound
+Each episode is written as **lines spoken by a narrator and the characters** in `src/scam/ep1/script.json`:
+```json
+{ "id": "station", "mood": "dark", "lines": [
+  { "who": "police",   "text": "तुम्हारे खाते से ठगी का पैसा आगे गया है।" },
+  { "who": "rahul",    "text": "सर, मुझे सच में नहीं पता था!" },
+  { "who": "narrator", "text": "..." } ] }
 ```
-This writes `public/audio/ep1/scene-XX.mp3` and `src/scam/ep1/voice.json` (clip lengths).
-`scripts/voiceover.py` rewrites 1930, OTP, PIN, RBI and website names into their spoken forms before speaking them.
+| Speaker | Voice |
+|---|---|
+| narrator | female (`hf_alpha`), calm and clear |
+| rahul | young male (`hm_omega`), slightly brighter |
+| scammer | deep male (`hm_psi`), pitched down, phone-line filter |
+| police | firm male (`hm_psi`), slightly deeper |
+| granny | female (`hf_beta`), pitched down, slight tremble |
 
-To use **your own recorded voice**, replace the `scene-XX.mp3` files and update the durations in `voice.json`.
+Generate the voices, then the score:
+```bash
+pip install kokoro-onnx soundfile numpy scipy
+# download kokoro-v1.0.onnx + voices-v1.0.bin from the kokoro-onnx "model-files-v1.0" release
+npm run voice -- ep1 --models /path/to/models   # -> public/audio/ep1/l-*.mp3 + src/scam/ep1/voice.json
+npm run music -- ep1                            # -> public/audio/ep1/music.mp3
+npm run ep1 && npm run ep1:final
+```
+- **Timing:** every scene lasts as long as its lines, and the animations (mouths, chat bubbles, knocks, bars) are cued to the lines.
+- **Music** (`scripts/music.py`) is generated to the same timeline, with one mood per scene: `sting`, `tension` (ticking clock and drone), `light`, `dark` (heartbeat and clashing drone), `hope` (warm chords). It drops automatically whenever someone speaks.
+- **Sound effects** play at a low level (`sfxVolume` 0.3) so they never cover the voice.
+- `scripts/voiceover.py` rewrites 1930, OTP, PIN, RBI and website names into their spoken forms.
+- **Your own recordings:** replace the `l-XX-Y.mp3` files and update their `dur` in `voice.json`.
 
-Props (`--props='{...}'`): `useVoice` (default true), `music` (default `audio/bed.mp3`), `musicVolume` (0.08), `showSubtitles` (true).
+Props (`--props='{...}'`): `useVoice`, `useMusic`, `musicVolume` (0.5), `sfxVolume` (0.3), `showSubtitles`.
 
 ### Structure
 - `src/scam/characters.tsx`: flat animated people (Rahul, granny, scammer, police, friends, parents) with blinking, expressions, talking mouths and arm poses

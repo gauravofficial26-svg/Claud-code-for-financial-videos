@@ -18,8 +18,9 @@ const components = Object.fromEntries(
 
 const defaultEpisodeProps: EpisodeProps = {
   useVoice: true,
-  music: "audio/bed.mp3",
-  musicVolume: 0.08,
+  useMusic: true,
+  musicVolume: 0.5,
+  sfxVolume: 0.3,
   showSubtitles: true,
 };
 

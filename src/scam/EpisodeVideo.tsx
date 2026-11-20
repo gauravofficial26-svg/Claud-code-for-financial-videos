@@ -3,6 +3,7 @@ import "./fonts";
 import { C, FONT } from "./theme";
 import type { Episode, EpisodeProps } from "./types";
 import { Subtitles } from "./Subtitles";
+import { SfxLevel } from "./Sfx";
 import { sceneTimeline } from "./timeline";
 
 const Header: React.FC<{ ep: Episode }> = ({ ep }) => (
@@ -36,27 +37,42 @@ const Fade: React.FC<{ children: React.ReactNode; first: boolean }> = ({ childre
   return <AbsoluteFill style={{ opacity: p }}>{children}</AbsoluteFill>;
 };
 
-export const EpisodeVideo: React.FC<EpisodeProps & { ep: Episode }> = ({ ep, useVoice, music, musicVolume, showSubtitles }) => {
+export const EpisodeVideo: React.FC<EpisodeProps & { ep: Episode }> = ({ ep, useVoice, useMusic, musicVolume, sfxVolume, showSubtitles }) => {
   const { fps } = useVideoConfig();
   const timeline = sceneTimeline(ep, fps);
+  // global speech intervals, used to duck the music under dialogue
+  const speech = timeline.flatMap((t) => t.cues.map((c) => [t.from + c.from + 4, t.from + c.to + 4] as const));
+  const musicVol = (f: number) => {
+    let d = Infinity;
+    for (const [a, b] of speech) d = Math.min(d, f < a ? a - f : f > b ? f - b : 0);
+    return musicVolume * interpolate(d, [0, 10], [0.35, 1], { extrapolateRight: "clamp" });
+  };
   return (
-    <AbsoluteFill style={{ fontFamily: FONT, color: C.text, background: C.bg }}>
-      {timeline.map(({ scene: s, index, from, dur }) => (
-        <Sequence key={s.id} from={from} durationInFrames={dur} name={s.id}>
-          <Fade first={index === 0}>
-            <s.Visual dur={dur} />
-          </Fade>
-          {s.onScreen && <OnScreenText text={s.onScreen} />}
-          {showSubtitles && <Subtitles text={s.voiceover} durationInFrames={dur} />}
-          {useVoice && ep.voice && (
-            <Sequence from={4} layout="none">
-              <Audio src={staticFile(ep.voice.files[index])} />
+    <SfxLevel.Provider value={sfxVolume}>
+      <AbsoluteFill style={{ fontFamily: FONT, color: C.text, background: C.bg }}>
+        {timeline.map(({ index, from, dur, cues }) => {
+          const s = ep.scenes[index];
+          return (
+            <Sequence key={s.id} from={from} durationInFrames={dur} name={s.id}>
+              <Fade first={index === 0}>
+                <s.Visual dur={dur} cues={cues} />
+              </Fade>
+              {s.onScreen && <OnScreenText text={s.onScreen} />}
+              {showSubtitles && <Subtitles cues={cues} />}
+              {useVoice &&
+                cues.map((c, i) =>
+                  c.file ? (
+                    <Sequence key={i} from={c.from + 4} layout="none" name={`${c.who}: ${c.text.slice(0, 20)}`}>
+                      <Audio src={staticFile(c.file)} />
+                    </Sequence>
+                  ) : null,
+                )}
             </Sequence>
-          )}
-        </Sequence>
-      ))}
-      <Header ep={ep} />
-      {music && <Audio src={staticFile(music)} volume={musicVolume} loop />}
-    </AbsoluteFill>
+          );
+        })}
+        <Header ep={ep} />
+        {useMusic && ep.music && <Audio src={staticFile(ep.music)} volume={musicVol} />}
+      </AbsoluteFill>
+    </SfxLevel.Provider>
   );
 };

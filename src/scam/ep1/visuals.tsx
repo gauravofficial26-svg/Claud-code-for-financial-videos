@@ -5,9 +5,11 @@ import { CrossMark, FollowButton, ShareArrow } from "../icons";
 import { Bars, Cam, Cell, ChatBubble, ChatHeader, Desk, Home, Notification, PhoneCloseup, Room, Station, Table } from "../sets";
 import { Sfx } from "../Sfx";
 import { C } from "../theme";
+import { at, speaking } from "../timeline";
+import type { SceneProps } from "../types";
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
-type V = React.FC<{ dur: number }>;
+type V = React.FC<SceneProps>;
 
 const usePop = (delay: number, damping = 12) => {
   const frame = useCurrentFrame();
@@ -58,16 +60,16 @@ const LockScreen: React.FC<{ at: number }> = ({ at }) => (
   </AbsoluteFill>
 );
 
-/* 1. Hook: phone close-up with the offer, then Rahul behind bars */
-export const HookScene: V = ({ dur }) => {
+/* 1. Hook: phone close-up with the offer (scammer whispers it), then Rahul behind bars */
+export const HookScene: V = ({ cues }) => {
   const frame = useCurrentFrame();
-  const cut = Math.round(dur * 0.48);
+  const cut = at(cues[1], 0.55);
   return (
     <AbsoluteFill>
       {frame < cut ? (
         <Cam to={1.12} dur={cut} origin="50% 35%">
           <PhoneCloseup>
-            <LockScreen at={6} />
+            <LockScreen at={4} />
           </PhoneCloseup>
         </Cam>
       ) : (
@@ -79,60 +81,57 @@ export const HookScene: V = ({ dur }) => {
         </Shake>
       )}
       <Flash at={cut} />
-      <Sfx name="ping" at={6} />
-      <Sfx name="whoosh" at={cut - 6} volume={0.6} />
+      <Sfx name="ping" at={4} />
+      <Sfx name="whoosh" at={cut - 6} />
       <Sfx name="slam" at={cut + 6} />
     </AbsoluteFill>
   );
 };
 
 /* 2. Rahul at his desk at night, phone buzzes */
-export const RoomScene: V = ({ dur }) => {
+export const RoomScene: V = ({ dur, cues }) => {
   const frame = useCurrentFrame();
-  const buzzAt = Math.round(dur * 0.45);
-  const pick = Math.round(dur * 0.78);
+  const buzzAt = at(cues[0], 0.6);
+  const pick = cues[1].from - 4;
   const picked = frame >= pick;
   return (
     <Cam dur={dur}>
       <Room>
-        <Person look={LOOKS.rahul} expr={picked ? "neutral" : frame > buzzAt ? "worried" : "neutral"} arm={picked ? "phone" : "down"}
+        <Person look={LOOKS.rahul} expr={picked ? "worried" : "neutral"} talking={speaking(cues, "rahul", frame)} arm={picked ? "phone" : "down"}
           width={560} style={{ position: "absolute", left: 260, top: 400 }} seed={2} headTilt={frame > buzzAt && !picked ? 6 : 0} />
         <Desk phoneOnDesk={!picked} buzz={frame > buzzAt && !picked} />
       </Room>
       <NameTag name="राहुल" sub="कॉलेज स्टूडेंट" at={8} style={{ left: 0, top: 260 }} />
-      <Sfx name="buzz" at={buzzAt} volume={0.7} />
+      <Sfx name="buzz" at={buzzAt} />
     </Cam>
   );
 };
 
-/* 3. The chat on Rahul's phone */
-export const ChatScene: V = ({ dur }) => {
-  const t = (f: number) => Math.round(dur * f);
-  const times = [t(0.06), t(0.24), t(0.42), t(0.78)];
-  return (
-    <Cam dur={dur} to={1.05}>
-      <PhoneCloseup>
-        <ChatHeader name="अनजान नंबर" />
-        <div style={{ display: "flex", flexDirection: "column", paddingTop: 34 }}>
-          <ChatBubble at={times[0]} text="हैलो राहुल! घर बैठे कमाई करोगे?" />
-          <ChatBubble at={times[1]} text="आपके खाते में पैसा आएगा, बस आगे भेज देना" />
-          <ChatBubble at={times[2]} text="बदले में कमीशन आपका" />
-          <ChatBubble at={times[3]} text="ठीक है, डील!" mine />
-        </div>
-      </PhoneCloseup>
-      {times.map((at, i) => <Sfx key={i} name={i === 3 ? "pop" : "ping"} at={at} volume={0.6} />)}
-    </Cam>
-  );
-};
+/* 3. The chat: each bubble appears as the scammer says it */
+export const ChatScene: V = ({ dur, cues }) => (
+  <Cam dur={dur} to={1.05}>
+    <PhoneCloseup>
+      <ChatHeader name="अनजान नंबर" />
+      <div style={{ display: "flex", flexDirection: "column", paddingTop: 34 }}>
+        <ChatBubble at={cues[0].from} text="हैलो राहुल! घर बैठे कमाई करोगे?" />
+        <ChatBubble at={cues[1].from} text="तुम्हारे खाते में पैसा आएगा, बस आगे भेज देना" />
+        <ChatBubble at={cues[2].from} text="बदले में कमीशन तुम्हारा" />
+        <ChatBubble at={cues[3].from} text="ठीक है, डील!" mine />
+      </div>
+    </PhoneCloseup>
+    {cues.map((c, i) => <Sfx key={i} name={i === 3 ? "pop" : "ping"} at={c.from} />)}
+  </Cam>
+);
 
 /* 4. Money comes in, goes out, Rahul is happy */
-export const EasyMoneyScene: V = ({ dur }) => {
+export const EasyMoneyScene: V = ({ dur, cues }) => {
   const frame = useCurrentFrame();
-  const t = (f: number) => Math.round(dur * f);
+  const times = [at(cues[0], 0.02), at(cues[0], 0.35), at(cues[0], 0.7)];
   return (
     <Cam dur={dur} to={1.04}>
       <Room>
-        <Person look={LOOKS.rahul} expr="happy" arm="phone" width={560} style={{ position: "absolute", left: 260, top: 400 }} seed={3} headTilt={Math.sin(frame * 0.2) * 4} />
+        <Person look={LOOKS.rahul} expr="happy" talking={speaking(cues, "rahul", frame)} arm="phone" width={560} style={{ position: "absolute", left: 260, top: 400 }} seed={3}
+          headTilt={Math.sin(frame * 0.2) * 4} />
         <Desk />
         {[0, 1, 2, 3, 4].map((i) => {
           const y = interpolate((frame + i * 20) % 60, [0, 60], [1000, 700]);
@@ -141,11 +140,11 @@ export const EasyMoneyScene: V = ({ dur }) => {
         })}
       </Room>
       <div style={{ position: "absolute", top: 180, left: 120, right: 120 }}>
-        <Notification at={t(0.03)} title="बैंक" body="+ ₹ आपके खाते में जमा" color={C.green} />
-        <Notification at={t(0.3)} title="बैंक" body="− ₹ आगे भेजे गए" color={C.red} icon="↗" />
-        <Notification at={t(0.55)} title="बैंक" body="+ ₹ कमीशन मिला" color={C.yellow} />
+        <Notification at={times[0]} title="बैंक" body="+ ₹ आपके खाते में जमा" color={C.green} />
+        <Notification at={times[1]} title="बैंक" body="− ₹ आगे भेजे गए" color={C.red} icon="↗" />
+        <Notification at={times[2]} title="बैंक" body="+ ₹ कमीशन मिला" color={C.yellow} />
       </div>
-      {[0.03, 0.3, 0.55].map((f) => <Sfx key={f} name="ping" at={t(f)} volume={0.5} />)}
+      {times.map((t) => <Sfx key={t} name="ping" at={t} />)}
     </Cam>
   );
 };
@@ -161,28 +160,28 @@ const Panel: React.FC<{ x: number; y: number; at: number; bg: string; label: str
   );
 };
 
-export const RevealScene: V = ({ dur }) => {
+export const RevealScene: V = ({ cues }) => {
   const frame = useCurrentFrame();
-  const t = (f: number) => Math.round(dur * f);
+  const n = cues[1];
   const pts = [[400, 420], [680, 800], [400, 1180]];
+  const coinStart = n.from;
   return (
     <AbsoluteFill style={{ background: "radial-gradient(circle at 50% 50%, #1E293B, #0A0E1A 80%)" }}>
       <svg width={1080} height={1400} style={{ position: "absolute" }}>
         <path d={`M${pts[0][0]} ${pts[0][1]} Q 900 520 ${pts[1][0]} ${pts[1][1]} Q 200 980 ${pts[2][0]} ${pts[2][1]}`} fill="none" stroke="#334155" strokeWidth="12"
-          strokeDasharray="24 18" strokeDashoffset={-frame * 3} opacity={interpolate(frame, [t(0.12), t(0.2)], [0, 1], clamp)} />
+          strokeDasharray="24 18" strokeDashoffset={-frame * 3} opacity={interpolate(frame, [n.from, n.from + 10], [0, 1], clamp)} />
       </svg>
       <Panel x={60} y={180} at={0} bg="#5B3A4A" label="किसी का लूटा पैसा" labelColor="#F9A8D4">
-        <Person look={LOOKS.granny} expr="sad" arm="phone" width={300} style={{ position: "absolute", left: 130, top: 20 }} seed={4} />
+        <Person look={LOOKS.granny} expr="sad" talking={speaking(cues, "granny", frame)} arm="phone" width={300} style={{ position: "absolute", left: 130, top: 20 }} seed={4} />
       </Panel>
-      <Panel x={460} y={560} at={t(0.15)} bg="#22304F" label="राहुल का खाता" labelColor={C.yellow}>
+      <Panel x={460} y={560} at={n.from} bg="#22304F" label="राहुल का खाता" labelColor={C.yellow}>
         <Person look={LOOKS.rahul} expr="happy" arm="phone" width={300} style={{ position: "absolute", left: 130, top: 20 }} seed={5} />
       </Panel>
-      <Panel x={60} y={940} at={t(0.3)} bg="#111318" label="ठग" labelColor={C.red}>
+      <Panel x={60} y={940} at={n.from + 15} bg="#111318" label="ठग" labelColor={C.red}>
         <Person look={LOOKS.scammer} expr="evil" arm="cross" width={300} style={{ position: "absolute", left: 130, top: 20 }} seed={6} />
       </Panel>
-      {/* coins following the path */}
       {[0, 1, 2, 3].map((i) => {
-        const start = t(0.2) + i * 14;
+        const start = coinStart + 10 + i * 14;
         if (frame < start) return null;
         const u = ((frame - start) % 60) / 60;
         const seg = u < 0.5 ? 0 : 1;
@@ -193,29 +192,27 @@ export const RevealScene: V = ({ dur }) => {
         const y = (1 - lu) ** 2 * a[1] + 2 * (1 - lu) * lu * ctrl[1] + lu ** 2 * b[1];
         return <div key={i} style={{ position: "absolute", left: x - 32, top: y - 32, width: 64, height: 64, borderRadius: 99, background: C.yellow, color: C.bg, fontSize: 40, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 6px 20px rgba(0,0,0,0.5)" }}>₹</div>;
       })}
-      <Stamp text="म्यूल अकाउंट" at={t(0.62)} style={{ left: 520, top: 520 }} size={64} />
-      <Sfx name="slam" at={t(0.62)} volume={0.5} />
+      <Stamp text="म्यूल अकाउंट" at={at(n, 0.72)} style={{ left: 520, top: 520 }} size={64} />
+      <Sfx name="slam" at={at(n, 0.72)} volume={0.6} />
     </AbsoluteFill>
   );
 };
 
 /* 6. Account frozen, then a knock: police at the door */
-export const FrozenScene: V = ({ dur }) => {
+export const FrozenScene: V = ({ dur, cues }) => {
   const frame = useCurrentFrame();
-  const t = (f: number) => Math.round(dur * f);
-  const knock = t(0.45);
-  const door = interpolate(frame, [knock + 22, knock + 40], [0, 1], clamp);
-  const ice = interpolate(frame, [t(0.08), t(0.2)], [0, 1], clamp);
+  const knock = at(cues[1], 0.45);
+  const door = interpolate(frame, [knock + 18, knock + 32], [0, 1], clamp);
+  const ice = interpolate(frame, [4, 20], [0, 1], clamp);
   return (
     <Cam dur={dur} to={1.04} origin="70% 50%">
       <Room door={door}>
-        {door > 0.05 && <Person look={LOOKS.police} expr="stern" arm="cross" width={300} style={{ position: "absolute", right: 60, top: 600 }} seed={7} />}
-        <Person look={LOOKS.rahul} expr="shock" arm={frame < knock ? "phone" : "cheek"} width={540} style={{ position: "absolute", left: 60, top: 430 }} seed={8}
+        {door > 0.05 && <Person look={LOOKS.police} expr="stern" talking={speaking(cues, "police", frame)} arm="cross" width={300} style={{ position: "absolute", right: 60, top: 600 }} seed={7} />}
+        <Person look={LOOKS.rahul} expr="shock" talking={speaking(cues, "rahul", frame)} arm={frame < knock ? "phone" : "cheek"} width={540} style={{ position: "absolute", left: 60, top: 430 }} seed={8}
           headTilt={frame > knock ? 8 : 0} />
         <Desk laptop={false} lamp={false} />
       </Room>
-      {/* frozen alert */}
-      <div style={{ position: "absolute", left: 90, right: 90, top: 190, opacity: interpolate(frame, [t(0.04), t(0.1), knock - 5, knock + 5], [0, 1, 1, 0], clamp) }}>
+      <div style={{ position: "absolute", left: 90, right: 90, top: 190, opacity: interpolate(frame, [0, 6, knock - 5, knock + 5], [0, 1, 1, 0], clamp) }}>
         <div style={{ position: "relative", background: "rgba(30,41,59,0.97)", borderRadius: 34, padding: "26px 34px", border: "4px solid #BAE6FD", overflow: "hidden" }}>
           <div style={{ fontSize: 34, color: C.muted, fontWeight: 700 }}>बैंक अलर्ट</div>
           <div style={{ fontSize: 52, fontWeight: 800, lineHeight: 1.2 }}>आपका खाता फ्रीज़ कर दिया गया है</div>
@@ -225,17 +222,18 @@ export const FrozenScene: V = ({ dur }) => {
       {frame >= knock && frame < knock + 30 && (
         <div style={{ position: "absolute", right: 80, top: 420, fontSize: 80, fontWeight: 800, color: C.yellow, transform: `rotate(-8deg) scale(${1 + Math.sin(frame) * 0.05})`, textShadow: "0 4px 0 #000" }}>ठक! ठक!</div>
       )}
-      <Sfx name="pop" at={t(0.05)} />
-      <Sfx name="knock" at={knock} />
+      <Sfx name="pop" at={2} />
+      <Sfx name="knock" at={knock} volume={1.4} />
     </Cam>
   );
 };
 
-/* 7. Police station: "मुझे नहीं पता था", then lock-up */
-export const StationScene: V = ({ dur }) => {
+/* 7. Police station: officer, "मुझे नहीं पता था", then lock-up */
+export const StationScene: V = ({ cues }) => {
   const frame = useCurrentFrame();
-  const cut = Math.round(dur * 0.55);
-  const bubble = usePop(6, 12);
+  const n = cues[2];
+  const cut = at(n, 0.5);
+  const bubble = usePop(cues[1].from, 12);
   if (frame >= cut) {
     return (
       <Shake at={cut + 7}>
@@ -250,23 +248,26 @@ export const StationScene: V = ({ dur }) => {
   return (
     <Cam dur={cut} to={1.05}>
       <Station>
-        <Person look={LOOKS.police} expr="stern" arm="cross" width={470} style={{ position: "absolute", left: 20, top: 500 }} seed={10} />
-        <Person look={LOOKS.rahul} expr="worried" talking={frame > 6 && frame < cut * 0.45} arm="cheek" width={470} style={{ position: "absolute", right: 20, top: 520 }} seed={11} />
+        <Person look={LOOKS.police} expr="stern" talking={speaking(cues, "police", frame)} arm="cross" width={470} style={{ position: "absolute", left: 20, top: 500 }} seed={10} />
+        <Person look={LOOKS.rahul} expr="worried" talking={speaking(cues, "rahul", frame)} arm="cheek" width={470} style={{ position: "absolute", right: 20, top: 520 }} seed={11} />
         <Table />
       </Station>
-      <div style={{ position: "absolute", right: 70, top: 290, transform: `scale(${bubble})`, transformOrigin: "80% 100%" }}>
-        <div style={{ background: "#fff", color: C.bg, fontSize: 58, fontWeight: 800, padding: "22px 40px", borderRadius: 40, borderBottomRightRadius: 6 }}>मुझे नहीं पता था!</div>
-      </div>
-      <Stamp text="बचाव नहीं" at={Math.round(cut * 0.55)} style={{ left: 60, top: 300 }} />
+      {frame >= cues[1].from && (
+        <div style={{ position: "absolute", right: 70, top: 290, transform: `scale(${bubble})`, transformOrigin: "80% 100%" }}>
+          <div style={{ background: "#fff", color: C.bg, fontSize: 58, fontWeight: 800, padding: "22px 40px", borderRadius: 40, borderBottomRightRadius: 6 }}>मुझे नहीं पता था!</div>
+        </div>
+      )}
+      <Stamp text="बचाव नहीं" at={n.from + 8} style={{ left: 60, top: 300 }} />
+      <Sfx name="pop" at={n.from + 8} />
     </Cam>
   );
 };
 
-/* 8. The right way: block & report, never share account/card/OTP/PIN */
-export const RightWayScene: V = ({ dur }) => {
+/* 8. The right way: Rahul refuses and blocks; never share account/card/OTP/PIN */
+export const RightWayScene: V = ({ dur, cues }) => {
   const frame = useCurrentFrame();
-  const cut = Math.round(dur * 0.42);
-  const tap = Math.round(cut * 0.55);
+  const cut = cues[2].from - 4;
+  const tap = cues[1].to - 2;
   if (frame < cut) {
     const blocked = frame >= tap + 4;
     return (
@@ -275,6 +276,7 @@ export const RightWayScene: V = ({ dur }) => {
           <ChatHeader name="अनजान नंबर" sub={blocked ? "ब्लॉक किया गया" : "online"} />
           <div style={{ display: "flex", flexDirection: "column", paddingTop: 34 }}>
             <ChatBubble at={0} text="खाता रेंट पर दो, कमीशन आपका" />
+            <ChatBubble at={cues[1].from} text="ना भाई, मेरा खाता किराए के लिए नहीं है!" mine />
           </div>
           <div style={{ position: "absolute", left: 40, right: 40, bottom: 80, background: blocked ? C.green : C.red, borderRadius: 30, padding: "26px 0", textAlign: "center", fontSize: 50, fontWeight: 800,
             transform: `scale(${frame >= tap && frame < tap + 4 ? 0.94 : 1})` }}>
@@ -288,11 +290,13 @@ export const RightWayScene: V = ({ dur }) => {
         <div style={{ position: "absolute", top: 160, left: 0, right: 0, textAlign: "center" }}>
           <span style={{ background: C.green, color: C.bg, fontSize: 44, fontWeight: 800, padding: "8px 30px", borderRadius: 14 }}>सही तरीका</span>
         </div>
+        <Sfx name="pop" at={cues[1].from} />
         <Sfx name="pop" at={tap} />
       </AbsoluteFill>
     );
   }
   const items = ["खाता", "डेबिट कार्ड", "OTP", "PIN"];
+  const step = Math.max(6, Math.round((cues[2].to - cues[2].from) / 5));
   return (
     <Cam dur={dur - cut} to={1.04}>
       <Room>
@@ -301,10 +305,10 @@ export const RightWayScene: V = ({ dur }) => {
       </Room>
       <div style={{ position: "absolute", top: 200, left: 60, right: 60, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 26 }}>
         {items.map((it, i) => (
-          <Chip key={it} text={it} at={6 + i * 10} />
+          <Chip key={it} text={it} at={cues[2].from - cut + i * step} />
         ))}
       </div>
-      {items.map((_, i) => <Sfx key={i} name="pop" at={cut * 0 + 6 + i * 10} volume={0.5} />)}
+      {items.map((_, i) => <Sfx key={i} name="pop" at={cues[2].from - cut + i * step + 10} />)}
     </Cam>
   );
 };
@@ -324,23 +328,24 @@ const Chip: React.FC<{ text: string; at: number }> = ({ text, at }) => {
   );
 };
 
-/* 9. Three steps + call 1930 */
-export const StepsScene: V = ({ dur }) => {
+/* 9. Three steps + Rahul calls 1930 */
+export const StepsScene: V = ({ dur, cues }) => {
   const frame = useCurrentFrame();
-  const t = (f: number) => Math.round(dur * f);
   const steps = ["ऑफ़र ठुकराओ", "पैसा आगे मत भेजो", "बैंक को बताओ"];
-  const callAt = t(0.62);
+  const stepAt = [at(cues[0], 0), at(cues[0], 0.2), at(cues[0], 0.4)];
+  const callAt = at(cues[0], 0.7);
   const call = usePop(callAt, 11);
+  const onCall = frame >= cues[1].from - 6;
   return (
     <Cam dur={dur} to={1.03}>
       <Room>
-        <Person look={LOOKS.rahul} expr={frame >= callAt ? "neutral" : "happy"} talking={frame >= callAt + 10} arm={frame >= callAt ? "phoneEar" : "down"} width={520}
+        <Person look={LOOKS.rahul} expr={onCall ? "neutral" : "happy"} talking={speaking(cues, "rahul", frame)} arm={onCall ? "phoneEar" : "down"} width={520}
           style={{ position: "absolute", left: 120, top: 560 }} seed={13} />
         <Desk laptop={false} lamp={false} />
       </Room>
       <div style={{ position: "absolute", top: 180, left: 60, right: 60 }}>
         {steps.map((s, i) => (
-          <Step key={s} n={i + 1} text={s} at={t(0.02 + i * 0.18)} />
+          <Step key={s} n={i + 1} text={s} at={stepAt[i]} />
         ))}
       </div>
       <div style={{ position: "absolute", left: 600, top: 650, transform: `scale(${call * (1 + Math.sin(frame * 0.3) * 0.04)})`, background: C.green, color: C.bg, borderRadius: 40, padding: "18px 36px", textAlign: "center",
@@ -348,7 +353,7 @@ export const StepsScene: V = ({ dur }) => {
         <div style={{ fontSize: 34, fontWeight: 800 }}>ठगी हुई? कॉल करें</div>
         <div style={{ fontSize: 110, fontWeight: 800, lineHeight: 1 }}>1930</div>
       </div>
-      {[0, 1, 2].map((i) => <Sfx key={i} name="pop" at={t(0.02 + i * 0.18)} volume={0.5} />)}
+      {stepAt.map((t) => <Sfx key={t} name="pop" at={t} />)}
       <Sfx name="ping" at={callAt} />
     </Cam>
   );
@@ -365,16 +370,16 @@ const Step: React.FC<{ n: number; text: string; at: number }> = ({ n, text, at }
   );
 };
 
-/* 10. Outro: share with friends & family, follow */
-export const OutroScene: React.FC<{ dur: number; source: string }> = ({ dur, source }) => {
+/* 10. Outro: Rahul warns friends, share with friends & family, follow */
+export const OutroScene: React.FC<SceneProps & { source: string }> = ({ cues, source }) => {
   const frame = useCurrentFrame();
-  const t = (f: number) => Math.round(dur * f);
-  const friends = usePop(t(0.1), 12);
-  const family = usePop(t(0.22), 12);
-  const follow = usePop(t(0.45), 10);
+  const n = cues[1];
+  const friends = usePop(n.from, 12);
+  const family = usePop(n.from + 12, 12);
+  const follow = usePop(at(n, 0.55), 10);
   return (
     <AbsoluteFill style={{ background: "radial-gradient(circle at 50% 40%, #1E3A5F, #0A0E1A 80%)" }}>
-      <Person look={LOOKS.rahul} expr="happy" arm="wave" width={430} style={{ position: "absolute", left: 325, top: 230 }} seed={14} />
+      <Person look={LOOKS.rahul} expr="happy" talking={speaking(cues, "rahul", frame)} arm="wave" width={430} style={{ position: "absolute", left: 325, top: 230 }} seed={14} />
       <ShareArrow size={150} color={C.yellow} style={{ position: "absolute", left: 200, top: 650, transform: `scaleX(-1) rotate(20deg) scale(${friends})` }} />
       <ShareArrow size={150} color={C.yellow} style={{ position: "absolute", right: 200, top: 650, transform: `rotate(20deg) scale(${family})` }} />
       <div style={{ position: "absolute", left: 10, top: 780, display: "flex", opacity: friends, transform: `scale(${friends})` }}>
@@ -390,10 +395,10 @@ export const OutroScene: React.FC<{ dur: number; source: string }> = ({ dur, sou
       <div style={{ position: "absolute", top: 1150, left: 0, right: 0, display: "flex", justifyContent: "center", opacity: follow }}>
         <FollowButton scale={follow * (1 + Math.sin(frame * 0.25) * 0.06)} />
       </div>
-      <div style={{ position: "absolute", top: 1690, left: 90, right: 150, textAlign: "center", fontSize: 28, color: C.muted, lineHeight: 1.35 }}>{source}</div>
-      <Sfx name="whoosh" at={t(0.1)} volume={0.5} />
-      <Sfx name="whoosh" at={t(0.22)} volume={0.5} />
-      <Sfx name="pop" at={t(0.45)} />
+      <div style={{ position: "absolute", top: 1720, left: 90, right: 150, textAlign: "center", fontSize: 28, color: C.muted, lineHeight: 1.35 }}>{source}</div>
+      <Sfx name="whoosh" at={n.from} />
+      <Sfx name="whoosh" at={n.from + 12} />
+      <Sfx name="pop" at={at(n, 0.55)} />
     </AbsoluteFill>
   );
 };

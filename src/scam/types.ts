@@ -1,15 +1,24 @@
 import type React from "react";
 
+export type Speaker = "narrator" | "rahul" | "scammer" | "police" | "granny";
+export type Line = { who: Speaker; text: string };
+
+/** A spoken line placed on the scene's local timeline (frames) */
+export type Cue = Line & { from: number; to: number; file?: string };
+
+export type SceneProps = { dur: number; cues: Cue[] };
+
 export type SceneDef = {
   id: string;
-  voiceover: string;
-  /** optional big headline over the scene */
+  lines: Line[];
   onScreen?: string;
-  /** dur = scene length in frames */
-  Visual: React.FC<{ dur: number }>;
+  Visual: React.FC<SceneProps>;
 };
 
-export type VoiceMeta = { files: string[]; durations: number[] };
+export type VoiceMeta = {
+  total: number;
+  scenes: { id: string; mood: string; start: number; dur: number; lines: { who: string; text: string; file: string; start: number; dur: number }[] }[];
+};
 
 export type Episode = {
   id: string;
@@ -19,13 +28,14 @@ export type Episode = {
   caption: string;
   source: string;
   voice?: VoiceMeta;
+  music?: string;
 };
 
 export type EpisodeProps = {
-  /** play the generated per-scene voice clips */
   useVoice: boolean;
-  /** background music inside /public, or null */
-  music: string | null;
+  useMusic: boolean;
+  /** music level between lines; it ducks under speech automatically */
   musicVolume: number;
+  sfxVolume: number;
   showSubtitles: boolean;
 };

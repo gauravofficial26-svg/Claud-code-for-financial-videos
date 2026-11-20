@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "ep1": "remotion render ScamEp1-MuleAccount out/ep1-mule-account.mp4",
     "ep1:final": "ffmpeg -y -i out/ep1-mule-account.mp4 -c:v copy -af loudnorm=I=-14:TP=-1.5:LRA=7 -c:a aac -b:a 192k out/ep1-mule-account-final.mp4",
-    "voice": "python3 scripts/voiceover.py"
+    "voice": "python3 scripts/voiceover.py",
+    "music": "python3 scripts/music.py"
   },
   "dependencies": {
     "@remotion/cli": "^4.0.545",
